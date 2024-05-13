@@ -15,7 +15,7 @@ namespace BusinessApplicationProject
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=BusinessApplicationProjectDb;User Id=sa;Password=Password123;Encrypt=no");
+            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=BusinessApplicationDb;User Id=sa;Password=Password123;Encrypt=no");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,6 +70,11 @@ namespace BusinessApplicationProject
 
             modelBuilder.Entity<Address>().ToTable(nameof(Addresses), b => b.IsTemporal());
             modelBuilder.Entity<Article>().ToTable(nameof(Articles), b => b.IsTemporal());
+            modelBuilder.Entity<ArticleGroup>().ToTable(nameof(ArticleGroups), b => b.IsTemporal());
+            modelBuilder.Entity<Customer>().ToTable(nameof(Customers), b => b.IsTemporal());
+            modelBuilder.Entity<Invoice>().ToTable(nameof(Invoices), b => b.IsTemporal());
+            modelBuilder.Entity<Order>().ToTable(nameof(Orders), b => b.IsTemporal());
+            modelBuilder.Entity<Position>().ToTable(nameof(Positions), b => b.IsTemporal());
         }
     }
 }
