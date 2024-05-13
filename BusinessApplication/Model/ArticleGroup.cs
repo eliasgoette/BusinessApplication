@@ -10,6 +10,6 @@ namespace BusinessApplication.Model
         public int Id { get; set; }
 
         public required string Name { get; set; }
-        public ArticleGroup? Parent { get; set; }
+        public virtual ArticleGroup? Parent { get; set; }
     }
 }

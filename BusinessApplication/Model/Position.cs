@@ -10,7 +10,7 @@ namespace BusinessApplication.Model
         public int Id { get; set; }
 
         public required int PositionNumber { get; set; }
-        public required Article ArticleDetails { get; set; }
+        public required virtual Article ArticleDetails { get; set; }
         public int Quantity { get; set; }
     }
 }

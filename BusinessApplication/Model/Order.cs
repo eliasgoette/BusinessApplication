@@ -11,7 +11,7 @@ namespace BusinessApplication.Model
 
         public required string OrderNumber { get; set; }
         public DateTime Date { get; set; }
-        public required Customer CustomerDetails { get; set; }
-        public required List<Position> Positions { get; set; }
+        public required virtual Customer CustomerDetails { get; set; }
+        public required virtual List<Position> Positions { get; set; }
     }
 }

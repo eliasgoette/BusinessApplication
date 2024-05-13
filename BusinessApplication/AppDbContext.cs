@@ -16,6 +16,7 @@ namespace BusinessApplicationProject
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=localhost,1433;Database=BusinessApplicationDb;User Id=sa;Password=Password123;Encrypt=no");
+            optionsBuilder.UseLazyLoadingProxies();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

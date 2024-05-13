@@ -1,6 +1,3 @@
-using BusinessApplication.Model;
-using BusinessApplicationProject;
-
 namespace BusinessApplication.Tests
 {
     [TestClass]
