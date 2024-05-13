@@ -1,3 +1,8 @@
+using BusinessApplication.Model;
+using BusinessApplicationProject;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+
 namespace BusinessApplication.Tests
 {
     [TestClass]
@@ -8,10 +13,11 @@ namespace BusinessApplication.Tests
         {
             // Shouldn't always run => uncomment if needed
 
-            //var addr = new Address {
-            //    Country = "United States", 
+            //var addr = new Address
+            //{
+            //    Country = "United States",
             //    ZipCode = "10001",
-            //    City = "New York City", 
+            //    City = "New York City",
             //    StreetAddress = "101 5th Ave"
             //};
 
@@ -62,7 +68,7 @@ namespace BusinessApplication.Tests
 
             //using (var ctx = new AppDbContext())
             //{
-            //    foreach(var customer in customers)
+            //    foreach (var customer in customers)
             //    {
             //        ctx.Add(customer);
             //        ctx.SaveChanges();
@@ -70,6 +76,48 @@ namespace BusinessApplication.Tests
             //        Assert.IsNotNull(ctx.Customers.Where(c => c.CustomerNumber == customer.CustomerNumber).FirstOrDefault());
             //        Assert.IsNotNull(ctx.Customers.Where(c => c.CustomerNumber == customer.CustomerNumber).FirstOrDefault()?.CustomerAddress);
             //    }
+            //}
+        }
+
+        [TestMethod]
+        public void TestUpdateCustomers()
+        {
+            // Shouldn't always run => uncomment if needed
+
+            //using (var ctx = new AppDbContext())
+            //{
+            //    var customer = ctx.Customers.FirstOrDefault();
+            //    customer.Email = "FF" + customer.Email;
+            //    ctx.Update(customer);
+
+            //    ctx.SaveChanges();
+
+            //    Assert.AreEqual("FF", ctx.Customers.FirstOrDefault()?.Email?.Substring(0, 2));
+            //}
+        }
+
+        [TestMethod]
+        public void TestDeleteAllCustomers()
+        {
+            // Shouldn't always run => uncomment if needed
+
+            //using (var ctx = new AppDbContext())
+            //{
+            //    var customers = ctx.Customers.ToList();
+
+            //    foreach (var customer in customers)
+            //    {
+            //        ctx.Remove(customer.CustomerAddress);
+            //        ctx.Remove(customer);
+            //    }
+
+            //    ctx.SaveChanges();
+
+            //    var addressesLeft = ctx.Addresses.Count();
+            //    var customersLeft = ctx.Customers.Count();
+
+            //    Assert.AreEqual(0, addressesLeft);
+            //    Assert.AreEqual(0, customersLeft);
             //}
         }
     }
