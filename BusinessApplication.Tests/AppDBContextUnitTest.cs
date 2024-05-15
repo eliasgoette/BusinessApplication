@@ -1,7 +1,5 @@
 using BusinessApplication.Model;
 using BusinessApplicationProject;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace BusinessApplication.Tests
 {
@@ -80,19 +78,29 @@ namespace BusinessApplication.Tests
         }
 
         [TestMethod]
-        public void TestUpdateCustomers()
+        public void TestAlterCustomer()
         {
             // Shouldn't always run => uncomment if needed
+            // This code will update the first customer from the database
 
             //using (var ctx = new AppDbContext())
             //{
             //    var customer = ctx.Customers.FirstOrDefault();
-            //    customer.Email = "FF" + customer.Email;
-            //    ctx.Update(customer);
+            //    var testPrefix = "UPDATE_TEST123";
 
-            //    ctx.SaveChanges();
+            //    if (customer != null)
+            //    {
+            //        customer.Email = testPrefix + customer.Email;
+            //        ctx.Update(customer);
 
-            //    Assert.AreEqual("FF", ctx.Customers.FirstOrDefault()?.Email?.Substring(0, 2));
+            //        ctx.SaveChanges();
+
+            //        Assert.AreEqual(testPrefix, ctx.Customers.FirstOrDefault()?.Email?.Substring(0, testPrefix.Length));
+            //    }
+            //    else
+            //    {
+            //        Assert.Fail("Customer is null.");
+            //    }
             //}
         }
 
@@ -100,6 +108,7 @@ namespace BusinessApplication.Tests
         public void TestDeleteAllCustomers()
         {
             // Shouldn't always run => uncomment if needed
+            // This code will permanently remove all customer data from the database
 
             //using (var ctx = new AppDbContext())
             //{
