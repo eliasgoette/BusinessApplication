@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240513141040_Initial-Create")]
+    [Migration("20240518192340_Initial-Create")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,10 @@ namespace BusinessApplication.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.5")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -81,9 +84,14 @@ namespace BusinessApplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("ArticleNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -103,6 +111,8 @@ namespace BusinessApplication.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Articles", (string)null);
 
@@ -130,6 +140,9 @@ namespace BusinessApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("PeriodEnd")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -141,6 +154,8 @@ namespace BusinessApplication.Migrations
                         .HasColumnName("PeriodStart");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("ArticleGroups", (string)null);
 
@@ -160,6 +175,11 @@ namespace BusinessApplication.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CustomerAddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerNumber")
@@ -195,6 +215,8 @@ namespace BusinessApplication.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerAddressId");
+
                     b.ToTable("Customers", (string)null);
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
@@ -215,15 +237,20 @@ namespace BusinessApplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BillingAddressId")
+                        .HasColumnType("int");
+
                     b.Property<double>("Discount")
                         .HasColumnType("float");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("InvoiceNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderInformationsId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PaymentMethod")
                         .IsRequired()
@@ -248,6 +275,10 @@ namespace BusinessApplication.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BillingAddressId");
+
+                    b.HasIndex("OrderInformationsId");
+
                     b.ToTable("Invoices", (string)null);
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
@@ -268,8 +299,10 @@ namespace BusinessApplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CustomerDetailsId")
+                        .HasColumnType("int");
 
                     b.Property<string>("OrderNumber")
                         .IsRequired()
@@ -286,6 +319,8 @@ namespace BusinessApplication.Migrations
                         .HasColumnName("PeriodStart");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerDetailsId");
 
                     b.ToTable("Orders", (string)null);
 
@@ -307,6 +342,14 @@ namespace BusinessApplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArticleDetailsId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("PeriodEnd")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
@@ -325,6 +368,10 @@ namespace BusinessApplication.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArticleDetailsId");
+
+                    b.HasIndex("OrderId");
+
                     b.ToTable("Positions", (string)null);
 
                     b.ToTable(tb => tb.IsTemporal(ttb =>
@@ -342,8 +389,8 @@ namespace BusinessApplication.Migrations
             modelBuilder.Entity("BusinessApplication.Model.Article", b =>
                 {
                     b.HasOne("BusinessApplication.Model.ArticleGroup", "Group")
-                        .WithMany()
-                        .HasForeignKey("Id");
+                        .WithMany("Articles")
+                        .HasForeignKey("GroupId");
 
                     b.Navigation("Group");
                 });
@@ -352,7 +399,7 @@ namespace BusinessApplication.Migrations
                 {
                     b.HasOne("BusinessApplication.Model.ArticleGroup", "Parent")
                         .WithMany()
-                        .HasForeignKey("Id");
+                        .HasForeignKey("ParentId");
 
                     b.Navigation("Parent");
                 });
@@ -361,7 +408,7 @@ namespace BusinessApplication.Migrations
                 {
                     b.HasOne("BusinessApplication.Model.Address", "CustomerAddress")
                         .WithMany()
-                        .HasForeignKey("Id")
+                        .HasForeignKey("CustomerAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -372,13 +419,13 @@ namespace BusinessApplication.Migrations
                 {
                     b.HasOne("BusinessApplication.Model.Address", "BillingAddress")
                         .WithMany()
-                        .HasForeignKey("Id")
+                        .HasForeignKey("BillingAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BusinessApplication.Model.Order", "OrderInformations")
                         .WithMany()
-                        .HasForeignKey("Id")
+                        .HasForeignKey("OrderInformationsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -391,7 +438,7 @@ namespace BusinessApplication.Migrations
                 {
                     b.HasOne("BusinessApplication.Model.Customer", "CustomerDetails")
                         .WithMany()
-                        .HasForeignKey("Id")
+                        .HasForeignKey("CustomerDetailsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -402,17 +449,20 @@ namespace BusinessApplication.Migrations
                 {
                     b.HasOne("BusinessApplication.Model.Article", "ArticleDetails")
                         .WithMany()
-                        .HasForeignKey("Id")
+                        .HasForeignKey("ArticleDetailsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BusinessApplication.Model.Order", null)
                         .WithMany("Positions")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("ArticleDetails");
+                });
+
+            modelBuilder.Entity("BusinessApplication.Model.ArticleGroup", b =>
+                {
+                    b.Navigation("Articles");
                 });
 
             modelBuilder.Entity("BusinessApplication.Model.Order", b =>

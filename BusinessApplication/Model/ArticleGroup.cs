@@ -11,5 +11,6 @@ namespace BusinessApplication.Model
 
         public required string Name { get; set; }
         public virtual ArticleGroup? Parent { get; set; }
+        public virtual ICollection<Article>? Articles { get; set; } = new List<Article>();
     }
 }

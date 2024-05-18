@@ -8,7 +8,6 @@ namespace BusinessApplication.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
         public required virtual Address CustomerAddress { get; set; }
         public required string CustomerNumber { get; set; }
         public required string FirstName { get; set; }

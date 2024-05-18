@@ -1,135 +1,197 @@
-﻿using BusinessApplication.Model;
-using BusinessApplicationProject;
+﻿using BusinessApplicationProject;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Linq.Expressions;
 
 namespace BusinessApplication.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected readonly AppDbContext Context;
+        private readonly AppDbContext _context;
 
         public Repository(AppDbContext context)
         {
-            Context = context;
+            _context = context;
         }
 
-        public List<T> GetAll()
+        public bool Add(T entity)
         {
-            if (Context.Database.CanConnect())
+            try
             {
-                var query = AddIncludes(typeof(T), Context.Set<T>());
-                return query.ToList();
+                var canConnect = _context.Database.CanConnect();
+                if (canConnect)
+                {
+                    _context.Set<T>().Add(entity);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    // TODO: Create error window
+                }
             }
-            else
+            catch (OperationCanceledException ex)
             {
-                throw new TimeoutException();
+                // TODO: Create error window
             }
+            catch (DbUpdateException ex)
+            {
+                // TODO: Create error window
+            }
+            catch (DBConcurrencyException ex)
+            {
+                // TODO: Create error window
+            }
+            catch (Exception)
+            {
+                // TODO: Create error window
+            }
+
+            return false;
         }
 
-        public List<T> Find(Expression<Func<T, bool>> condition)
+        public async Task<bool> AddAsync(T entity)
         {
-            if (Context.Database.CanConnect())
+            try
             {
-                var query = AddIncludes(typeof(T), Context.Set<T>());
-                return [.. query.Where(condition)];
+                var canConnect = await _context.Database.CanConnectAsync();
+                if (canConnect)
+                {
+                    await _context.Set<T>().AddAsync(entity);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    // TODO: Create error window
+                }
             }
-            else
+            catch (OperationCanceledException ex)
             {
-                throw new TimeoutException();
+                // TODO: Create error window
             }
+            catch (DbUpdateException ex)
+            {
+                // TODO: Create error window
+            }
+            catch (DBConcurrencyException ex)
+            {
+                // TODO: Create error window
+            }
+            catch (Exception)
+            {
+                // TODO: Create error window
+            }
+
+            return false;
         }
 
-        public async Task AddAsync(T entity)
+        public IEnumerable<T> GetAllWhereAsOf(Expression<Func<T, bool>> predicate, DateTime utcDateTime)
         {
-            if (await Context.Database.CanConnectAsync())
+            try
             {
-                await Context.Set<T>().AddAsync(entity);
-                await Context.SaveChangesAsync();
+                var canConnect = _context.Database.CanConnect();
+                if (canConnect)
+                {
+                    return _context.Set<T>().TemporalAsOf(utcDateTime).Where(predicate);
+                }
+                else
+                {
+                    // TODO: Create error window
+                }
             }
-            else
+            catch (OperationCanceledException ex)
             {
-                throw new TimeoutException();
+                // TODO: Create error window
+            }
+            catch (DbUpdateException ex)
+            {
+                // TODO: Create error window
+            }
+            catch (DBConcurrencyException ex)
+            {
+                // TODO: Create error window
+            }
+            catch (Exception)
+            {
+                // TODO: Create error window
             }
 
+            return Enumerable.Empty<T>();
         }
 
-        public void Remove(T entity)
+        public IEnumerable<T> GetAllWhere(Expression<Func<T, bool>> predicate)
         {
-            if (Context.Database.CanConnect())
-            {
-                Context.Set<T>().Remove(entity);
-                Context.SaveChanges();
-            }
-            else
-            {
-                throw new TimeoutException();
-            }
+            return GetAllWhereAsOf(predicate, DateTime.UtcNow);
         }
 
-        public void Update(T entity)
+        public IEnumerable<T> GetAll()
         {
-            if (Context.Database.CanConnect())
-            {
-                Context.Set<T>().Update(entity);
-                Context.SaveChanges();
-            }
-            else
-            {
-                throw new TimeoutException();
-            }
+            return GetAllWhere(x => true);
         }
 
-        private IQueryable<T> AddIncludes(Type type, IQueryable<T> query)
+        public bool Remove(T entity)
         {
-            var includes = GetAllNavigationPropertyNames(typeof(T));
-
-            foreach (var propertyName in includes)
+            try
             {
-                query = query.Include(propertyName);
+                var canConnect = _context.Database.CanConnect();
+                if (canConnect)
+                {
+                    _context.Set<T>().Remove(entity);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    // TODO: Create error window
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                // TODO: Create error window
+            }
+            catch (DBConcurrencyException ex)
+            {
+                // TODO: Create error window
+            }
+            catch (Exception)
+            {
+                // TODO: Create error window
             }
 
-            return query;
+            return false;
         }
 
-        private List<string> GetAllNavigationPropertyNames(Type type)
+        public bool Update(T entity)
         {
-            var res = new List<string>();
-
-            switch (type.Name)
+            try
             {
-                case nameof(Article):
-                    res.Add("Group.Parent");
-                    break;
-
-                case nameof(ArticleGroup):
-                    res.Add("Parent");
-                    break;
-
-                case nameof(Customer):
-                    res.Add("CustomerAddress");
-                    break;
-
-                case nameof(Invoice):
-                    res.Add("BillingAddress");
-                    res.Add("OrderInformations.CustomerDetails.CustomerAddress");
-                    res.Add("OrderInformations.Positions.ArticleDetails.Group.Parent");
-                    break;
-
-                case nameof(Order):
-                    res.Add("CustomerDetails.CustomerAddress");
-                    res.Add("Positions.ArticleDetails.Group.Parent");
-                    break;
-
-                case nameof(Position):
-                    res.Add("ArticleDetails.Group.Parent");
-                    break;
-
-                default:
-                    break;
+                var canConnect = _context.Database.CanConnect();
+                if (canConnect)
+                {
+                    _context.Set<T>().Update(entity);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    // TODO: Create error window
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                // TODO: Create error window
+            }
+            catch (DBConcurrencyException ex)
+            {
+                // TODO: Create error window
+            }
+            catch (Exception)
+            {
+                // TODO: Create error window
             }
 
-            return res;
+            return false;
         }
     }
 }

@@ -10,8 +10,8 @@ namespace BusinessApplication.Model
         public int Id { get; set; }
 
         public required string OrderNumber { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Date { get; } = DateTime.UtcNow;
         public required virtual Customer CustomerDetails { get; set; }
-        public required virtual List<Position> Positions { get; set; }
+        public required virtual ICollection<Position> Positions { get; set; } = new List<Position>();
     }
 }

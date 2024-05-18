@@ -26,46 +26,54 @@ namespace BusinessApplicationProject
             #region Configure Navigation Properties
 
             modelBuilder.Entity<Article>()
-                .HasOne(a => a.Group)
-                .WithMany()
-                .HasForeignKey(g => g.Id)
-                .IsRequired(false);
+                .Navigation(e => e.Group)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .EnableLazyLoading();
+
 
             modelBuilder.Entity<ArticleGroup>()
-                .HasOne(a => a.Parent)
-                .WithMany()
-                .HasForeignKey(p => p.Id)
-                .IsRequired(false);
+                .Navigation(e => e.Parent)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .EnableLazyLoading();
+
+            modelBuilder.Entity<ArticleGroup>()
+                .Navigation(e => e.Articles)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .EnableLazyLoading();
+
 
             modelBuilder.Entity<Customer>()
-                .HasOne(c => c.CustomerAddress)
-                .WithMany()
-                .HasForeignKey(a => a.Id);
+                .Navigation(e => e.CustomerAddress)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .EnableLazyLoading();
+
 
             modelBuilder.Entity<Invoice>()
-                .HasOne(i => i.BillingAddress)
-                .WithMany()
-                .HasForeignKey(b => b.Id);
+                .Navigation(e => e.BillingAddress)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .EnableLazyLoading();
 
             modelBuilder.Entity<Invoice>()
-                .HasOne(i => i.OrderInformations)
-                .WithMany()
-                .HasForeignKey(o => o.Id);
+                .Navigation(e => e.OrderInformations)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .EnableLazyLoading();
+
 
             modelBuilder.Entity<Order>()
-                .HasOne(o => o.CustomerDetails)
-                .WithMany()
-                .HasForeignKey(c => c.Id);
+                .Navigation(e => e.CustomerDetails)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .EnableLazyLoading();
 
             modelBuilder.Entity<Order>()
-                .HasMany(o => o.Positions)
-                .WithOne()
-                .HasForeignKey(p => p.Id);
+                .Navigation(e => e.Positions)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .EnableLazyLoading();
+
 
             modelBuilder.Entity<Position>()
-                .HasOne(p => p.ArticleDetails)
-                .WithMany()
-                .HasForeignKey(a => a.Id);
+                .Navigation(e => e.ArticleDetails)
+                .UsePropertyAccessMode(PropertyAccessMode.Property)
+                .EnableLazyLoading();
 
             #endregion
 

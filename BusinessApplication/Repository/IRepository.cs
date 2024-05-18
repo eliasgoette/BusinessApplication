@@ -4,10 +4,10 @@ namespace BusinessApplication.Repository
 {
     public interface IRepository<T> where T : class
     {
-        List<T> GetAll();
-        List<T> Find(Expression<Func<T, bool>> searchTerm);
-        Task AddAsync(T entity);
-        void Remove(T entity);
-        void Update(T entity);
+        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAllWhere(Expression<Func<T, bool>> searchTerm);
+        Task<bool> AddAsync(T entity);
+        bool Remove(T entity);
+        bool Update(T entity);
     }
 }
