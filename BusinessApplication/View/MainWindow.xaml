@@ -6,7 +6,24 @@
         xmlns:local="clr-namespace:BusinessApplication"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+    <StackPanel>
+        <DataGrid MaxHeight="200" x:Name="AddressDataGrid" ItemsSource="{Binding Addresses}" SelectedItem="{Binding Path=SelectedAddress}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Country" Binding="{Binding Country}" />
+                <DataGridTextColumn Header="Zip Code" Binding="{Binding ZipCode}" />
+                <DataGridTextColumn Header="City" Binding="{Binding City}" />
+                <DataGridTextColumn Header="Street Address" Binding="{Binding StreetAddress}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Width="120" HorizontalAlignment="Left" Margin="15">
+            <Button Content="Clear Selection" Margin="0, 5" Command="{Binding ClearSelection}"/>
+            <TextBox Margin="0, 5" TextWrapping="Wrap" Text="{Binding CurrentAddressCountry}"/>
+            <TextBox Margin="0, 5" TextWrapping="Wrap" Text="{Binding CurrentAddressZipCode}"/>
+            <TextBox Margin="0, 5" TextWrapping="Wrap" Text="{Binding CurrentAddressCity}"/>
+            <TextBox Margin="0, 5" TextWrapping="Wrap" Text="{Binding CurrentAddressStreetAddress}"/>
+            <Button Content="Add" Margin="0, 5" Command="{Binding AddAddress}"/>
+            <Button Content="Update" Margin="0, 5" Command="{Binding UpdateAddress}"/>
+            <Button Content="Remove" Margin="0, 5" Command="{Binding RemoveAddress}"/>
+        </StackPanel>
+    </StackPanel>
 </Window>

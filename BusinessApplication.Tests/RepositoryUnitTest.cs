@@ -11,7 +11,7 @@ namespace BusinessApplication.Tests
         Repository<Address> addressRepository = new Repository<Address>(new AppDbContext());
 
         [TestMethod]
-        public async Task TestAddCustomer()
+        public async Task TestAddCustomerAndOrder()
         {
             var address = new Address
             {
@@ -34,15 +34,15 @@ namespace BusinessApplication.Tests
             var customerFound = customerRepository.GetAllWhere(x => x == customer).FirstOrDefault();
             Assert.AreEqual(customer.CustomerNumber, customerFound?.CustomerNumber);
 
-            //var order = new Order
-            //{
-            //    CustomerDetails = customer,
-            //    OrderNumber = "O-10000",
-            //    Positions = new List<Position>()
-            //};
+            var order = new Order
+            {
+                CustomerDetails = customer,
+                OrderNumber = "O-10000",
+                Positions = new List<Position>()
+            };
 
-            //var orderRepository = new Repository<Order>(new AppDbContext());
-            //Assert.IsTrue(await orderRepository.AddAsync(order));
+            var orderRepository = new Repository<Order>(new AppDbContext());
+            Assert.IsTrue(await orderRepository.AddAsync(order));
         }
 
         [TestMethod]
