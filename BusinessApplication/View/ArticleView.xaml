@@ -6,7 +6,44 @@
              xmlns:local="clr-namespace:BusinessApplication.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary Source="./Styles.xaml"></ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock>Articles</TextBlock>
+            <DataGrid AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Article Number"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Name"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <Button>Clear Selection</Button>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <Label>Article Number</Label>
+            <TextBox></TextBox>
+            <Label>Name</Label>
+            <TextBox></TextBox>
+            <Label>Price</Label>
+            <TextBox></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="1">
+            <Border>
+                <Button>Add</Button>
+            </Border>
+            <Button>Update</Button>
+            <Button>Remove</Button>
+        </StackPanel>
     </Grid>
 </UserControl>
