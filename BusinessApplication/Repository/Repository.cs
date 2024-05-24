@@ -14,42 +14,6 @@ namespace BusinessApplication.Repository
             _context = context;
         }
 
-        public bool Add(T entity)
-        {
-            try
-            {
-                var canConnect = _context.Database.CanConnect();
-                if (canConnect)
-                {
-                    _context.Set<T>().Add(entity);
-                    _context.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    // TODO: Create error window
-                }
-            }
-            catch (OperationCanceledException ex)
-            {
-                // TODO: Create error window
-            }
-            catch (DbUpdateException ex)
-            {
-                // TODO: Create error window
-            }
-            catch (DBConcurrencyException ex)
-            {
-                // TODO: Create error window
-            }
-            catch (Exception)
-            {
-                // TODO: Create error window
-            }
-
-            return false;
-        }
-
         public async Task<bool> AddAsync(T entity)
         {
             try
