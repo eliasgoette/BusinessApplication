@@ -1,29 +1,23 @@
-﻿<Window x:Class="BusinessApplication.MainWindow"
+﻿<Window x:Class="BusinessApplication.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BusinessApplication"
+        xmlns:local="clr-namespace:BusinessApplication.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <StackPanel>
-        <DataGrid MaxHeight="200" x:Name="AddressDataGrid" ItemsSource="{Binding Addresses}" SelectedItem="{Binding Path=SelectedAddress}" AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Country" Binding="{Binding Country}" />
-                <DataGridTextColumn Header="Zip Code" Binding="{Binding ZipCode}" />
-                <DataGridTextColumn Header="City" Binding="{Binding City}" />
-                <DataGridTextColumn Header="Street Address" Binding="{Binding StreetAddress}" />
-            </DataGrid.Columns>
-        </DataGrid>
-        <StackPanel Width="120" HorizontalAlignment="Left" Margin="15">
-            <Button Content="Clear Selection" Margin="0, 5" Command="{Binding ClearSelection}"/>
-            <TextBox Margin="0, 5" TextWrapping="Wrap" Text="{Binding CurrentAddressCountry}"/>
-            <TextBox Margin="0, 5" TextWrapping="Wrap" Text="{Binding CurrentAddressZipCode}"/>
-            <TextBox Margin="0, 5" TextWrapping="Wrap" Text="{Binding CurrentAddressCity}"/>
-            <TextBox Margin="0, 5" TextWrapping="Wrap" Text="{Binding CurrentAddressStreetAddress}"/>
-            <Button Content="Add" Margin="0, 5" Command="{Binding AddAddress}"/>
-            <Button Content="Update" Margin="0, 5" Command="{Binding UpdateAddress}"/>
-            <Button Content="Remove" Margin="0, 5" Command="{Binding RemoveAddress}"/>
+        Title="MainWindow" Height="550" Width="960">
+    <Window.Resources>
+        <ResourceDictionary Source="./Styles.xaml"></ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <Button Command="{Binding SetCustomerView}">Customers</Button>
+            <Button Command="{Binding SetArticleView}">Articles</Button>
         </StackPanel>
-    </StackPanel>
+        <ContentControl Content="{Binding CurrentView}" Grid.Column="1" />
+    </Grid>
 </Window>

@@ -1,9 +1,7 @@
-﻿using BusinessApplication.Model;
-using BusinessApplication.Repository;
-using BusinessApplicationProject;
+﻿using BusinessApplication.ViewModel;
 using System.Windows;
 
-namespace BusinessApplication
+namespace BusinessApplication.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -13,7 +11,7 @@ namespace BusinessApplication
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new AddressViewModel(new Repository<Address>(new AppDbContext()));
+            DataContext = new MainViewModel();
         }
     }
 }
