@@ -23,7 +23,7 @@
             <TextBlock Style="{StaticResource Title}">Customers</TextBlock>
             <StackPanel>
                 <Label>Customer Number</Label>
-                <TextBox></TextBox>
+                <TextBox Text="{Binding SearchCustomerNumber}"></TextBox>
                 <Button>Search</Button>
             </StackPanel>
             <DataGrid AutoGenerateColumns="False">
@@ -39,27 +39,27 @@
         </StackPanel>
         <StackPanel Grid.Column="1">
             <Label>CustomerNumber</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding CustomerNumber}"></TextBox>
             <Label>FirstName</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding FirstName}"></TextBox>
             <Label>LastName</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding LastName}"></TextBox>
             <Label>Email</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding Email}"></TextBox>
             <Label>Website</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding Website}"></TextBox>
             <Label>Password</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding Password}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Column="2">
             <Label>Country</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding CustomerAddress_Country}"></TextBox>
             <Label>Zip Code</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding CustomerAddress_ZipCode}"></TextBox>
             <Label>City</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding CustomerAddress_City}"></TextBox>
             <Label>Street Address</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding CustomerAddress_StreetAddress}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1">
             <Border>
