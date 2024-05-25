@@ -7,8 +7,33 @@ namespace BusinessApplication.Tests
     [TestClass]
     public class RepositoryUnitTest
     {
-        Repository<Customer> customerRepository = new Repository<Customer>(new AppDbContext());
-        Repository<Address> addressRepository = new Repository<Address>(new AppDbContext());
+        Repository<Customer> customerRepository;
+        Repository<Address> addressRepository;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            var addresses = new List<Address> {
+                new Address {
+                    Country = "United States",
+                    ZipCode = "IN 47374",
+                    City = "Richmond",
+                    StreetAddress = "2739 Sugarfoot Lane"
+                }
+            };
+
+            var customers = new List<Customer>
+            {
+                new Customer
+                {
+                    CustomerNumber = "CU-TEST-00001",
+                    FirstName = "Jim",
+                    LastName = "Ricketts",
+                    Email = "JimBRicketts@yahoo.com",
+                    CustomerAddress = addresses[0]
+                }
+            };
+        }
 
         [TestMethod]
         public async Task TestAddCustomerAndOrder()
@@ -51,7 +76,7 @@ namespace BusinessApplication.Tests
             var customer = customerRepository.GetAll().FirstOrDefault();
             var testName = "Test";
 
-            if(customer == null)
+            if (customer == null)
             {
                 Assert.Fail("No customer found to update.");
             }
@@ -66,10 +91,8 @@ namespace BusinessApplication.Tests
         }
 
         [TestMethod]
-        public void TestZRemoveCustomer()
+        public void TestRemoveCustomer()
         {
-            // Z in name makes it the last test to run
-
             var customer = customerRepository.GetAll().FirstOrDefault();
 
             Assert.IsNotNull(customer);
