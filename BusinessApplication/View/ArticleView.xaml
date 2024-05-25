@@ -19,7 +19,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel>
-            <TextBlock>Articles</TextBlock>
+            <TextBlock Style="{StaticResource Title}">Articles</TextBlock>
+            <StackPanel>
+                <Label>Article Number</Label>
+                <TextBox></TextBox>
+                <Button>Search</Button>
+            </StackPanel>
             <DataGrid AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Article Number"></DataGridTextColumn>

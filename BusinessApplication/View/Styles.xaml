@@ -4,7 +4,7 @@
         <Setter Property="Background" Value="White"></Setter>
     </Style>
     <Style TargetType="StackPanel">
-        <Setter Property="VerticalAlignment" Value="Top"></Setter>
+        <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
     </Style>
     <Style TargetType="TextBlock">
         <Setter Property="Margin" Value="5"></Setter>
@@ -17,6 +17,11 @@
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="5"></Setter>
         <Setter Property="Padding" Value="5"></Setter>
+    </Style>
+    <Style TargetType="TextBlock" x:Key="Title">
+        <Setter Property="Margin" Value="0 5"></Setter>
+        <Setter Property="Padding" Value="5"></Setter>
+        <Setter Property="FontSize" Value="16"></Setter>
     </Style>
     <Style TargetType="Button">
         <Setter Property="Margin" Value="5"></Setter>

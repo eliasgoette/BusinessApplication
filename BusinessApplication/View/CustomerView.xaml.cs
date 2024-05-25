@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using BusinessApplication.Model;
+using BusinessApplication.Repository;
+using BusinessApplication.ViewModel;
+using BusinessApplicationProject;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BusinessApplication.View
 {
@@ -23,6 +14,8 @@ namespace BusinessApplication.View
         public CustomerView()
         {
             InitializeComponent();
+            var customerRepository = new Repository<Customer>(new AppDbContext());
+            DataContext = new CustomerViewModel(customerRepository);
         }
     }
 }

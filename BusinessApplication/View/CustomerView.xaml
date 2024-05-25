@@ -20,7 +20,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel>
-            <TextBlock>Customers</TextBlock>
+            <TextBlock Style="{StaticResource Title}">Customers</TextBlock>
+            <StackPanel>
+                <Label>Customer Number</Label>
+                <TextBox></TextBox>
+                <Button>Search</Button>
+            </StackPanel>
             <DataGrid AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Customer Number"></DataGridTextColumn>

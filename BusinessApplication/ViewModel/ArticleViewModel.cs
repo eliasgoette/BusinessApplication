@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BusinessApplication.Model;
+using BusinessApplication.Repository;
 
 namespace BusinessApplication.ViewModel
 {
-    internal class ArticleViewModel
+    public class ArticleViewModel
     {
+        private readonly IRepository<Article> _articleRepository;
+
+        public ArticleViewModel(IRepository<Article> repository)
+        {
+            _articleRepository = repository;
+        }
     }
 }
