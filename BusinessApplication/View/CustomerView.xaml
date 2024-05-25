@@ -26,7 +26,7 @@
                 <TextBox Text="{Binding SearchCustomerNumber}"></TextBox>
                 <Button>Search</Button>
             </StackPanel>
-            <DataGrid AutoGenerateColumns="False">
+            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding SearchResults}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Customer Number"></DataGridTextColumn>
                     <DataGridTextColumn Header="First Name"></DataGridTextColumn>

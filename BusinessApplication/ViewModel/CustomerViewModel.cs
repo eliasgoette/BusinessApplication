@@ -1,10 +1,15 @@
 ﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
+using BusinessApplication.ViewModel;
 using System.ComponentModel;
+using System.Windows.Input;
 
 public class CustomerViewModel : INotifyPropertyChanged
 {
     private readonly IRepository<Customer> _customerRepository;
+
+    private List<Customer> _searchResults;
+    private Customer? _selectedCustomer;
 
     private string? _searchCustomerNumber;
     private string? _customerNumber;
@@ -23,6 +28,38 @@ public class CustomerViewModel : INotifyPropertyChanged
     public CustomerViewModel(IRepository<Customer> repository)
     {
         _customerRepository = repository;
+        _searchResults = _customerRepository.GetAll().ToList();
+
+        Search = new RelayCommand(() =>
+        {
+            if (SearchCustomerNumber != null)
+            {
+                _searchResults = _customerRepository.GetAllWhere(x => x.CustomerNumber == SearchCustomerNumber).ToList();
+            }
+            else
+            {
+                _searchResults = _customerRepository.GetAll().ToList();
+            }
+        });
+    }
+
+    public List<Customer> SearchResults => _searchResults;
+
+    public Customer? SelectedCustomer
+    {
+        get => _selectedCustomer;
+        set
+        {
+            _selectedCustomer = value;
+            OnPropertyChanged(nameof(SelectedCustomer));
+
+            CustomerNumber = value?.CustomerNumber;
+            FirstName = value?.FirstName;
+            LastName = value?.LastName;
+            Email = value?.Email;
+            Website = value?.Website;
+            Password = value?.PasswordHash;
+        }
     }
 
     public string? SearchCustomerNumber
@@ -163,6 +200,12 @@ public class CustomerViewModel : INotifyPropertyChanged
             }
         }
     }
+
+    public ICommand Search { get; }
+    public ICommand ClearSelection { get; }
+    public ICommand Add { get; }
+    public ICommand Update { get; }
+    public ICommand Remove { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
