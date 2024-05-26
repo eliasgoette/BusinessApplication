@@ -253,7 +253,26 @@ public class CustomerViewModel : INotifyPropertyChanged
         }
     }
 
-    private void ExecuteUpdate() { }
+    private void ExecuteUpdate()
+    {
+        if (ValidateInput())
+        {
+            SelectedCustomer.CustomerNumber = _customerNumber;
+            SelectedCustomer.FirstName = _firstName;
+            SelectedCustomer.LastName = _lastName;
+            SelectedCustomer.Email = _email;
+            SelectedCustomer.Website = _website;
+            SelectedCustomer.PasswordHash = _password;
+
+            SelectedCustomer.CustomerAddress.Country = _customerAddressCountry;
+            SelectedCustomer.CustomerAddress.ZipCode = _customerAddressZipCode;
+            SelectedCustomer.CustomerAddress.City = _customerAddressCity;
+            SelectedCustomer.CustomerAddress.StreetAddress = _customerAddressStreetAddress;
+
+            _customerRepository.Update(SelectedCustomer);
+            ExecuteSearch();
+        }
+    }
 
     private void ExecuteRemove()
     {
