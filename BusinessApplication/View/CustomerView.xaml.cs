@@ -1,6 +1,5 @@
 ﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
-using BusinessApplication.ViewModel;
 using BusinessApplicationProject;
 using System.Windows.Controls;
 
