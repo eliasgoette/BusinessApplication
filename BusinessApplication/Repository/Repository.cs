@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BusinessApplication.Model;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
 
@@ -54,7 +55,7 @@ namespace BusinessApplication.Repository
             return false;
         }
 
-        public IEnumerable<T> GetAllWhereAsOf(Expression<Func<T, bool>> predicate, DateTime utcDateTime)
+        public List<T> GetAllWhereAsOf(Expression<Func<T, bool>> predicate, DateTime utcDateTime)
         {
             try
             {
@@ -63,7 +64,22 @@ namespace BusinessApplication.Repository
                     var canConnect = context.Database.CanConnect();
                     if (canConnect)
                     {
-                        return context.Set<T>().TemporalAsOf(utcDateTime).Where(predicate).ToList();
+                        var navigationProperties = typeof(Customer)
+                            .GetProperties()
+                            .Where(prop => prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
+                            .Select(prop => prop.Name)
+                            .ToArray();
+
+                        var query = context.Set<T>().TemporalAsOf(utcDateTime).Where(predicate);
+
+                        foreach (var property in navigationProperties)
+                        {
+                            query = query.Include(property);
+                        }
+
+                        List<T> l = [.. query];
+
+                        return l;
                     }
                     else
                     {
@@ -88,7 +104,7 @@ namespace BusinessApplication.Repository
                 // TODO: Create error window
             }
 
-            return Enumerable.Empty<T>();
+            return [];
         }
 
         public IEnumerable<T> GetAllWhere(Expression<Func<T, bool>> predicate)
