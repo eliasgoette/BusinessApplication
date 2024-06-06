@@ -32,7 +32,7 @@ public class CustomerViewModel : INotifyPropertyChanged
 
         Search = new RelayCommand(ExecuteSearch);
         ClearSelection = new RelayCommand(() => SelectedCustomer = null);
-        Add = new RelayCommand(ExecuteAdd);
+        Add = new RelayCommand(() => ExecuteAdd());
         Update = new RelayCommand(ExecuteUpdate);
         Remove = new RelayCommand(ExecuteRemove);
     }
@@ -227,7 +227,7 @@ public class CustomerViewModel : INotifyPropertyChanged
         }
     }
 
-    private void ExecuteAdd()
+    private async Task ExecuteAdd()
     {
         if (ValidateInput())
         {
@@ -248,7 +248,7 @@ public class CustomerViewModel : INotifyPropertyChanged
                 PasswordHash = _password
             };
 
-            _customerRepository.AddAsync(newCustomer);
+            await _customerRepository.AddAsync(newCustomer);
             ExecuteSearch();
         }
     }
