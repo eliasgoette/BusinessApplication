@@ -1,7 +1,6 @@
 ﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
 using BusinessApplication.ViewModel;
-using BusinessApplicationProject;
 using System.Windows.Controls;
 
 namespace BusinessApplication.View
@@ -14,7 +13,7 @@ namespace BusinessApplication.View
         public ArticleView()
         {
             InitializeComponent();
-            var articleRepository = new Repository<Article>(new AppDbContext());
+            var articleRepository = new Repository<Article>(() => new AppDbContext());
             DataContext = new ArticleViewModel(articleRepository);
         }
     }

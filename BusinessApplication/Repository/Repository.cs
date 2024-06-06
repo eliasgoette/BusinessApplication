@@ -1,5 +1,4 @@
-﻿using BusinessApplicationProject;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
 
@@ -7,27 +6,32 @@ namespace BusinessApplication.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly AppDbContext _context;
+        private readonly DbContextFactoryMethod _getDbContext;
 
-        public Repository(AppDbContext context)
+        public delegate DbContext DbContextFactoryMethod();
+
+        public Repository(DbContextFactoryMethod getDbContext)
         {
-            _context = context;
+            _getDbContext = getDbContext;
         }
 
         public async Task<bool> AddAsync(T entity)
         {
             try
             {
-                var canConnect = await _context.Database.CanConnectAsync();
-                if (canConnect)
+                using (var context = _getDbContext())
                 {
-                    await _context.Set<T>().AddAsync(entity);
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                else
-                {
-                    // TODO: Create error window
+                    var canConnect = await context.Database.CanConnectAsync();
+                    if (canConnect)
+                    {
+                        await context.Set<T>().AddAsync(entity);
+                        await context.SaveChangesAsync();
+                        return true;
+                    }
+                    else
+                    {
+                        // TODO: Create error window
+                    }
                 }
             }
             catch (OperationCanceledException ex)
@@ -54,14 +58,17 @@ namespace BusinessApplication.Repository
         {
             try
             {
-                var canConnect = _context.Database.CanConnect();
-                if (canConnect)
+                using (var context = _getDbContext())
                 {
-                    return _context.Set<T>().TemporalAsOf(utcDateTime).Where(predicate);
-                }
-                else
-                {
-                    // TODO: Create error window
+                    var canConnect = context.Database.CanConnect();
+                    if (canConnect)
+                    {
+                        return context.Set<T>().TemporalAsOf(utcDateTime).Where(predicate).ToList();
+                    }
+                    else
+                    {
+                        // TODO: Create error window
+                    }
                 }
             }
             catch (OperationCanceledException ex)
@@ -98,16 +105,19 @@ namespace BusinessApplication.Repository
         {
             try
             {
-                var canConnect = _context.Database.CanConnect();
-                if (canConnect)
+                using (var context = _getDbContext())
                 {
-                    _context.Set<T>().Remove(entity);
-                    _context.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    // TODO: Create error window
+                    var canConnect = context.Database.CanConnect();
+                    if (canConnect)
+                    {
+                        context.Set<T>().Remove(entity);
+                        context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        // TODO: Create error window
+                    }
                 }
             }
             catch (DbUpdateException ex)
@@ -130,16 +140,19 @@ namespace BusinessApplication.Repository
         {
             try
             {
-                var canConnect = _context.Database.CanConnect();
-                if (canConnect)
+                using (var context = _getDbContext())
                 {
-                    _context.Set<T>().Update(entity);
-                    _context.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    // TODO: Create error window
+                    var canConnect = context.Database.CanConnect();
+                    if (canConnect)
+                    {
+                        context.Set<T>().Update(entity);
+                        context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        // TODO: Create error window
+                    }
                 }
             }
             catch (DbUpdateException ex)
