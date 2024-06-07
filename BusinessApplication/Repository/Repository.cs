@@ -64,7 +64,7 @@ namespace BusinessApplication.Repository
                     var canConnect = context.Database.CanConnect();
                     if (canConnect)
                     {
-                        var navigationProperties = typeof(Customer)
+                        var navigationProperties = typeof(T)
                             .GetProperties()
                             .Where(prop => prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
                             .Select(prop => prop.Name)

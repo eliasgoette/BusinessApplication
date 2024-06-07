@@ -276,7 +276,7 @@ public class CustomerViewModel : INotifyPropertyChanged
 
     private void ExecuteRemove()
     {
-        if(_selectedCustomer != null)
+        if (_selectedCustomer != null)
         {
             _customerRepository.Remove(_selectedCustomer);
         }
