@@ -45,10 +45,10 @@
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Border>
-                <Button>Add</Button>
+                <Button Command="{Binding Add}">Add</Button>
             </Border>
-            <Button>Update</Button>
-            <Button>Remove</Button>
+            <Button Command="{Binding Update}">Update</Button>
+            <Button Command="{Binding Remove}">Remove</Button>
         </StackPanel>
     </Grid>
 </UserControl>
