@@ -22,10 +22,10 @@
             <TextBlock Style="{StaticResource Title}">Articles</TextBlock>
             <StackPanel>
                 <Label>Article Number</Label>
-                <TextBox></TextBox>
+                <TextBox Text="{Binding SearchArticleNumber}"></TextBox>
                 <Button>Search</Button>
             </StackPanel>
-            <DataGrid AutoGenerateColumns="False">
+            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding SearchResults}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Article Number"></DataGridTextColumn>
                     <DataGridTextColumn Header="Name"></DataGridTextColumn>
@@ -37,11 +37,11 @@
         </StackPanel>
         <StackPanel Grid.Column="1">
             <Label>Article Number</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding ArticleNumber}"></TextBox>
             <Label>Name</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding ArticleName}"></TextBox>
             <Label>Price</Label>
-            <TextBox></TextBox>
+            <TextBox Text="{Binding ArticlePrice}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Border>
