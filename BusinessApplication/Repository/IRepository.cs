@@ -5,7 +5,7 @@ namespace BusinessApplication.Repository
     public interface IRepository<T> where T : class
     {
         Task<bool> AddAsync(T entity);
-        IEnumerable<T> GetAllWhereAsOf(Expression<Func<T, bool>> predicate, DateTime utcDateTime);
+        List<T> GetAllWhereAsOf(Expression<Func<T, bool>> predicate, DateTime utcDateTime);
         IEnumerable<T> GetAllWhere(Expression<Func<T, bool>> searchTerm);
         IEnumerable<T> GetAll();
         bool Remove(T entity);

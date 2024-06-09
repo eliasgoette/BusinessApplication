@@ -30,20 +30,22 @@ public class CustomerViewModel : INotifyPropertyChanged
         _customerRepository = repository;
         _searchResults = _customerRepository.GetAll().ToList();
 
-        Search = new RelayCommand(() =>
-        {
-            if (SearchCustomerNumber != null)
-            {
-                _searchResults = _customerRepository.GetAllWhere(x => x.CustomerNumber == SearchCustomerNumber).ToList();
-            }
-            else
-            {
-                _searchResults = _customerRepository.GetAll().ToList();
-            }
-        });
+        Search = new RelayCommand(ExecuteSearch);
+        ClearSelection = new RelayCommand(() => SelectedCustomer = null);
+        Add = new RelayCommand(() => ExecuteAdd());
+        Update = new RelayCommand(ExecuteUpdate);
+        Remove = new RelayCommand(ExecuteRemove);
     }
 
-    public List<Customer> SearchResults => _searchResults;
+    public List<Customer> SearchResults
+    {
+        get => _searchResults;
+        set
+        {
+            _searchResults = value;
+            OnPropertyChanged(nameof(SearchResults));
+        }
+    }
 
     public Customer? SelectedCustomer
     {
@@ -59,6 +61,12 @@ public class CustomerViewModel : INotifyPropertyChanged
             Email = value?.Email;
             Website = value?.Website;
             Password = value?.PasswordHash;
+
+            var address = value?.CustomerAddress;
+            CustomerAddressCountry = address?.Country;
+            CustomerAddressZipCode = address?.ZipCode;
+            CustomerAddressCity = address?.City;
+            CustomerAddressStreetAddress = address?.StreetAddress;
         }
     }
 
@@ -206,6 +214,93 @@ public class CustomerViewModel : INotifyPropertyChanged
     public ICommand Add { get; }
     public ICommand Update { get; }
     public ICommand Remove { get; }
+
+    private void ExecuteSearch()
+    {
+        if (SearchCustomerNumber != null)
+        {
+            SearchResults = _customerRepository.GetAllWhere(x => x.CustomerNumber.Contains(SearchCustomerNumber)).ToList();
+        }
+        else
+        {
+            SearchResults = _customerRepository.GetAll().ToList();
+        }
+    }
+
+    private async Task ExecuteAdd()
+    {
+        if (ValidateInput())
+        {
+            var newCustomer = new Customer
+            {
+                CustomerAddress = new Address
+                {
+                    Country = _customerAddressCountry,
+                    ZipCode = _customerAddressZipCode,
+                    City = _customerAddressCity,
+                    StreetAddress = _customerAddressStreetAddress
+                },
+                CustomerNumber = _customerNumber,
+                FirstName = _firstName,
+                LastName = _lastName,
+                Email = _email,
+                Website = _website,
+                PasswordHash = _password
+            };
+
+            await _customerRepository.AddAsync(newCustomer);
+            ExecuteSearch();
+        }
+    }
+
+    private void ExecuteUpdate()
+    {
+        if (ValidateInput())
+        {
+            SelectedCustomer.CustomerNumber = _customerNumber;
+            SelectedCustomer.FirstName = _firstName;
+            SelectedCustomer.LastName = _lastName;
+            SelectedCustomer.Email = _email;
+            SelectedCustomer.Website = _website;
+            SelectedCustomer.PasswordHash = _password;
+
+            SelectedCustomer.CustomerAddress.Country = _customerAddressCountry;
+            SelectedCustomer.CustomerAddress.ZipCode = _customerAddressZipCode;
+            SelectedCustomer.CustomerAddress.City = _customerAddressCity;
+            SelectedCustomer.CustomerAddress.StreetAddress = _customerAddressStreetAddress;
+
+            _customerRepository.Update(SelectedCustomer);
+            ExecuteSearch();
+        }
+    }
+
+    private void ExecuteRemove()
+    {
+        if (_selectedCustomer != null)
+        {
+            _customerRepository.Remove(_selectedCustomer);
+        }
+
+        ExecuteSearch();
+    }
+
+    private bool ValidateInput()
+    {
+        return (
+            !string.IsNullOrWhiteSpace(_customerNumber)
+            && !string.IsNullOrWhiteSpace(_firstName)
+            && !string.IsNullOrWhiteSpace(_lastName)
+            && ValidateAddressInput()
+        );
+    }
+
+    private bool ValidateAddressInput()
+    {
+        return !string.IsNullOrWhiteSpace(_customerAddressCountry) &&
+               !string.IsNullOrWhiteSpace(_customerAddressZipCode) &&
+               !string.IsNullOrWhiteSpace(_customerAddressCity) &&
+               !string.IsNullOrWhiteSpace(_customerAddressStreetAddress);
+    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

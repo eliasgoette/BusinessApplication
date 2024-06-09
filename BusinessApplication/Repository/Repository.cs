@@ -1,4 +1,4 @@
-﻿using BusinessApplicationProject;
+﻿using BusinessApplication.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
@@ -7,27 +7,32 @@ namespace BusinessApplication.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly AppDbContext _context;
+        private readonly DbContextFactoryMethod _getDbContext;
 
-        public Repository(AppDbContext context)
+        public delegate DbContext DbContextFactoryMethod();
+
+        public Repository(DbContextFactoryMethod getDbContext)
         {
-            _context = context;
+            _getDbContext = getDbContext;
         }
 
         public async Task<bool> AddAsync(T entity)
         {
             try
             {
-                var canConnect = await _context.Database.CanConnectAsync();
-                if (canConnect)
+                using (var context = _getDbContext())
                 {
-                    await _context.Set<T>().AddAsync(entity);
-                    await _context.SaveChangesAsync();
-                    return true;
-                }
-                else
-                {
-                    // TODO: Create error window
+                    var canConnect = await context.Database.CanConnectAsync();
+                    if (canConnect)
+                    {
+                        await context.Set<T>().AddAsync(entity);
+                        await context.SaveChangesAsync();
+                        return true;
+                    }
+                    else
+                    {
+                        // TODO: Create error window
+                    }
                 }
             }
             catch (OperationCanceledException ex)
@@ -50,18 +55,36 @@ namespace BusinessApplication.Repository
             return false;
         }
 
-        public IEnumerable<T> GetAllWhereAsOf(Expression<Func<T, bool>> predicate, DateTime utcDateTime)
+        public List<T> GetAllWhereAsOf(Expression<Func<T, bool>> predicate, DateTime utcDateTime)
         {
             try
             {
-                var canConnect = _context.Database.CanConnect();
-                if (canConnect)
+                using (var context = _getDbContext())
                 {
-                    return _context.Set<T>().TemporalAsOf(utcDateTime).Where(predicate);
-                }
-                else
-                {
-                    // TODO: Create error window
+                    var canConnect = context.Database.CanConnect();
+                    if (canConnect)
+                    {
+                        var navigationProperties = typeof(T)
+                            .GetProperties()
+                            .Where(prop => prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
+                            .Select(prop => prop.Name)
+                            .ToArray();
+
+                        var query = context.Set<T>().TemporalAsOf(utcDateTime).Where(predicate);
+
+                        foreach (var property in navigationProperties)
+                        {
+                            query = query.Include(property);
+                        }
+
+                        List<T> l = [.. query];
+
+                        return l;
+                    }
+                    else
+                    {
+                        // TODO: Create error window
+                    }
                 }
             }
             catch (OperationCanceledException ex)
@@ -81,7 +104,7 @@ namespace BusinessApplication.Repository
                 // TODO: Create error window
             }
 
-            return Enumerable.Empty<T>();
+            return [];
         }
 
         public IEnumerable<T> GetAllWhere(Expression<Func<T, bool>> predicate)
@@ -98,16 +121,19 @@ namespace BusinessApplication.Repository
         {
             try
             {
-                var canConnect = _context.Database.CanConnect();
-                if (canConnect)
+                using (var context = _getDbContext())
                 {
-                    _context.Set<T>().Remove(entity);
-                    _context.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    // TODO: Create error window
+                    var canConnect = context.Database.CanConnect();
+                    if (canConnect)
+                    {
+                        context.Set<T>().Remove(entity);
+                        context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        // TODO: Create error window
+                    }
                 }
             }
             catch (DbUpdateException ex)
@@ -130,16 +156,19 @@ namespace BusinessApplication.Repository
         {
             try
             {
-                var canConnect = _context.Database.CanConnect();
-                if (canConnect)
+                using (var context = _getDbContext())
                 {
-                    _context.Set<T>().Update(entity);
-                    _context.SaveChanges();
-                    return true;
-                }
-                else
-                {
-                    // TODO: Create error window
+                    var canConnect = context.Database.CanConnect();
+                    if (canConnect)
+                    {
+                        context.Set<T>().Update(entity);
+                        context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        // TODO: Create error window
+                    }
                 }
             }
             catch (DbUpdateException ex)

@@ -1,7 +1,7 @@
 ﻿using BusinessApplication.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace BusinessApplicationProject
+namespace BusinessApplication
 {
     public class AppDbContext : DbContext
     {
@@ -16,7 +16,6 @@ namespace BusinessApplicationProject
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=localhost,1433;Database=BusinessApplicationDb;User Id=sa;Password=Password123;Encrypt=no");
-            optionsBuilder.UseLazyLoadingProxies();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,53 +26,39 @@ namespace BusinessApplicationProject
 
             modelBuilder.Entity<Article>()
                 .Navigation(e => e.Group)
-                .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .EnableLazyLoading();
-
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
 
             modelBuilder.Entity<ArticleGroup>()
                 .Navigation(e => e.Parent)
-                .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .EnableLazyLoading();
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
 
             modelBuilder.Entity<ArticleGroup>()
                 .Navigation(e => e.Articles)
-                .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .EnableLazyLoading();
-
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
 
             modelBuilder.Entity<Customer>()
                 .Navigation(e => e.CustomerAddress)
-                .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .EnableLazyLoading();
-
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
 
             modelBuilder.Entity<Invoice>()
                 .Navigation(e => e.BillingAddress)
-                .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .EnableLazyLoading();
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
 
             modelBuilder.Entity<Invoice>()
                 .Navigation(e => e.OrderInformations)
-                .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .EnableLazyLoading();
-
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
 
             modelBuilder.Entity<Order>()
                 .Navigation(e => e.CustomerDetails)
-                .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .EnableLazyLoading();
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
 
             modelBuilder.Entity<Order>()
                 .Navigation(e => e.Positions)
-                .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .EnableLazyLoading();
-
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
 
             modelBuilder.Entity<Position>()
                 .Navigation(e => e.ArticleDetails)
-                .UsePropertyAccessMode(PropertyAccessMode.Property)
-                .EnableLazyLoading();
+                .UsePropertyAccessMode(PropertyAccessMode.Property);
 
             #endregion
 

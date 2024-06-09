@@ -1,7 +1,6 @@
 ﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
-using BusinessApplication.ViewModel;
-using BusinessApplicationProject;
+using System.Linq.Expressions;
 using System.Windows.Controls;
 
 namespace BusinessApplication.View
@@ -14,7 +13,7 @@ namespace BusinessApplication.View
         public CustomerView()
         {
             InitializeComponent();
-            var customerRepository = new Repository<Customer>(new AppDbContext());
+            var customerRepository = new Repository<Customer>(() => new AppDbContext());
             DataContext = new CustomerViewModel(customerRepository);
         }
     }

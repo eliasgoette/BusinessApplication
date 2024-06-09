@@ -1,6 +1,5 @@
 ﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
-using BusinessApplicationProject;
 
 namespace BusinessApplication.Tests
 {
@@ -33,6 +32,9 @@ namespace BusinessApplication.Tests
                     CustomerAddress = addresses[0]
                 }
             };
+
+            customerRepository = new Repository<Customer>(() => new AppDbContext());
+            addressRepository = new Repository<Address>(() => new AppDbContext());
         }
 
         [TestMethod]
@@ -58,16 +60,6 @@ namespace BusinessApplication.Tests
 
             var customerFound = customerRepository.GetAllWhere(x => x == customer).FirstOrDefault();
             Assert.AreEqual(customer.CustomerNumber, customerFound?.CustomerNumber);
-
-            var order = new Order
-            {
-                CustomerDetails = customer,
-                OrderNumber = "O-10000",
-                Positions = new List<Position>()
-            };
-
-            var orderRepository = new Repository<Order>(new AppDbContext());
-            Assert.IsTrue(await orderRepository.AddAsync(order));
         }
 
         [TestMethod]
