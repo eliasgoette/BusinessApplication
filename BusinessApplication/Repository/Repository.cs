@@ -1,5 +1,4 @@
-﻿using BusinessApplication.Model;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
 
@@ -8,12 +7,14 @@ namespace BusinessApplication.Repository
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly DbContextFactoryMethod _getDbContext;
+        private readonly ILogger _logger;
 
         public delegate DbContext DbContextFactoryMethod();
 
-        public Repository(DbContextFactoryMethod getDbContext)
+        public Repository(DbContextFactoryMethod getDbContext, ILogger logger)
         {
             _getDbContext = getDbContext;
+            _logger = logger;
         }
 
         public async Task<bool> AddAsync(T entity)
@@ -31,25 +32,13 @@ namespace BusinessApplication.Repository
                     }
                     else
                     {
-                        // TODO: Create error window
+                        LogConnectionError();
                     }
                 }
             }
-            catch (OperationCanceledException ex)
+            catch (Exception ex)
             {
-                // TODO: Create error window
-            }
-            catch (DbUpdateException ex)
-            {
-                // TODO: Create error window
-            }
-            catch (DBConcurrencyException ex)
-            {
-                // TODO: Create error window
-            }
-            catch (Exception)
-            {
-                // TODO: Create error window
+                _logger.LogError(ex.Message);
             }
 
             return false;
@@ -83,25 +72,13 @@ namespace BusinessApplication.Repository
                     }
                     else
                     {
-                        // TODO: Create error window
+                        LogConnectionError();
                     }
                 }
             }
-            catch (OperationCanceledException ex)
+            catch (Exception ex)
             {
-                // TODO: Create error window
-            }
-            catch (DbUpdateException ex)
-            {
-                // TODO: Create error window
-            }
-            catch (DBConcurrencyException ex)
-            {
-                // TODO: Create error window
-            }
-            catch (Exception)
-            {
-                // TODO: Create error window
+                _logger.LogError(ex.Message);
             }
 
             return [];
@@ -132,21 +109,13 @@ namespace BusinessApplication.Repository
                     }
                     else
                     {
-                        // TODO: Create error window
+                        LogConnectionError();
                     }
                 }
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                // TODO: Create error window
-            }
-            catch (DBConcurrencyException ex)
-            {
-                // TODO: Create error window
-            }
-            catch (Exception)
-            {
-                // TODO: Create error window
+                _logger.LogError(ex.Message);
             }
 
             return false;
@@ -167,24 +136,21 @@ namespace BusinessApplication.Repository
                     }
                     else
                     {
-                        // TODO: Create error window
+                        LogConnectionError();
                     }
                 }
             }
-            catch (DbUpdateException ex)
+            catch (Exception ex)
             {
-                // TODO: Create error window
-            }
-            catch (DBConcurrencyException ex)
-            {
-                // TODO: Create error window
-            }
-            catch (Exception)
-            {
-                // TODO: Create error window
+                _logger.LogError(ex.Message);
             }
 
             return false;
+        }
+
+        public void LogConnectionError()
+        {
+            _logger.LogError("Couldn't connect to DB.");
         }
     }
 }

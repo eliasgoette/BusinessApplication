@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 
 namespace BusinessApplication
 {
@@ -9,6 +7,13 @@ namespace BusinessApplication
     /// </summary>
     public partial class App : Application
     {
-    }
+        private static ILogger _appLogger = new Logger();
 
+        public App()
+        {
+            _appLogger.AddLoggingService(new PopupLoggingService());
+        }
+
+        public static ILogger AppLogger { get { return _appLogger; } }
+    }
 }
