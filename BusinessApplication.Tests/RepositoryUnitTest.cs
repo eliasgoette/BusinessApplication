@@ -33,8 +33,9 @@ namespace BusinessApplication.Tests
                 }
             };
 
-            customerRepository = new Repository<Customer>(() => new AppDbContext());
-            addressRepository = new Repository<Address>(() => new AppDbContext());
+            var logger = new Logger();
+            customerRepository = new Repository<Customer>(() => new AppDbContext(), logger);
+            addressRepository = new Repository<Address>(() => new AppDbContext(), logger);
         }
 
         [TestMethod]
