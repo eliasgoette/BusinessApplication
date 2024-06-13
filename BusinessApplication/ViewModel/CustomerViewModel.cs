@@ -3,7 +3,9 @@ using BusinessApplication.Model;
 using BusinessApplication.Repository;
 using BusinessApplication.ViewModel;
 using System.ComponentModel;
+using System.Text.Json;
 using System.Windows.Input;
+using System.Xml.Serialization;
 
 public class CustomerViewModel : INotifyPropertyChanged
 {
@@ -35,6 +37,8 @@ public class CustomerViewModel : INotifyPropertyChanged
 
         Search = new RelayCommand(ExecuteSearch);
         ClearSelection = new RelayCommand(() => SelectedCustomer = null);
+        ExportJson = new RelayCommand(ExecuteExportJson);
+        ExportXml = new RelayCommand(ExecuteExportXml);
         Add = new RelayCommand(() => ExecuteAdd());
         Update = new RelayCommand(ExecuteUpdate);
         Remove = new RelayCommand(ExecuteRemove);
@@ -214,6 +218,8 @@ public class CustomerViewModel : INotifyPropertyChanged
 
     public ICommand Search { get; }
     public ICommand ClearSelection { get; }
+    public ICommand ExportJson { get; }
+    public ICommand ExportXml { get; }
     public ICommand Add { get; }
     public ICommand Update { get; }
     public ICommand Remove { get; }
@@ -227,6 +233,26 @@ public class CustomerViewModel : INotifyPropertyChanged
         else
         {
             SearchResults = _customerRepository.GetAll().ToList();
+        }
+    }
+
+    private void ExecuteExportJson()
+    {
+        if (_searchResults.Count <= 0) _logger.LogMessage("Nothing to export.");
+        else
+        {
+            var json = Serializer.ToJson(_searchResults);
+            _logger.LogMessage(json);
+        }
+    }
+
+    private void ExecuteExportXml()
+    {
+        if (_searchResults.Count <= 0) _logger.LogMessage("Nothing to export.");
+        else
+        {
+            var xml = Serializer.ToXml(_searchResults);
+            _logger.LogMessage(xml);
         }
     }
 

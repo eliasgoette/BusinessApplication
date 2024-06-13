@@ -36,6 +36,8 @@
         </StackPanel>
         <StackPanel Grid.Row="1">
             <Button Command="{Binding ClearSelection}">Clear Selection</Button>
+            <Button Command="{Binding ExportJson}" Content="Export Customers to JSON"/>
+            <Button Command="{Binding ExportXml}" Content="Export Customers to XML"/>
         </StackPanel>
         <StackPanel Grid.Column="1">
             <Label>CustomerNumber</Label>
