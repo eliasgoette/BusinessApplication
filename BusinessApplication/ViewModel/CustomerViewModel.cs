@@ -1,4 +1,5 @@
-﻿using BusinessApplication.Model;
+﻿using BusinessApplication;
+using BusinessApplication.Model;
 using BusinessApplication.Repository;
 using BusinessApplication.ViewModel;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Windows.Input;
 public class CustomerViewModel : INotifyPropertyChanged
 {
     private readonly IRepository<Customer> _customerRepository;
+    ILogger _logger;
 
     private List<Customer> _searchResults;
     private Customer? _selectedCustomer;
@@ -25,9 +27,10 @@ public class CustomerViewModel : INotifyPropertyChanged
     private string? _customerAddressCity;
     private string? _customerAddressStreetAddress;
 
-    public CustomerViewModel(IRepository<Customer> repository)
+    public CustomerViewModel(IRepository<Customer> repository, ILogger logger)
     {
         _customerRepository = repository;
+        _logger = logger;
         _searchResults = _customerRepository.GetAll().ToList();
 
         Search = new RelayCommand(ExecuteSearch);
@@ -286,12 +289,28 @@ public class CustomerViewModel : INotifyPropertyChanged
 
     private bool ValidateInput()
     {
-        return (
-            !string.IsNullOrWhiteSpace(_customerNumber)
-            && !string.IsNullOrWhiteSpace(_firstName)
-            && !string.IsNullOrWhiteSpace(_lastName)
-            && ValidateAddressInput()
-        );
+        if (string.IsNullOrWhiteSpace(_customerNumber))
+        {
+            _logger.LogError("Customer number must be defined.");
+            return false;
+        }
+        if (string.IsNullOrWhiteSpace(_firstName))
+        {
+            _logger.LogError("First name must be defined.");
+            return false;
+        }
+        if (string.IsNullOrWhiteSpace(_lastName))
+        {
+            _logger.LogError("Last name must be defined.");
+            return false;
+        }
+        if (!ValidateAddressInput())
+        {
+            _logger.LogError("Address must be completely defined.");
+            return false;
+        }
+
+        return true;
     }
 
     private bool ValidateAddressInput()

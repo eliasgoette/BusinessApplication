@@ -16,7 +16,7 @@ namespace BusinessApplication.View
             var logger = new Logger();
             logger.AddLoggingService(new PopupLoggingService());
             var customerRepository = new Repository<Customer>(() => new AppDbContext(), App.AppLogger);
-            DataContext = new CustomerViewModel(customerRepository);
+            DataContext = new CustomerViewModel(customerRepository, App.AppLogger);
         }
     }
 }
