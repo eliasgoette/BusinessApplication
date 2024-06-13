@@ -309,6 +309,10 @@ public class CustomerViewModel : INotifyPropertyChanged
         {
             _customerRepository.Remove(_selectedCustomer);
         }
+        else
+        {
+            _logger.LogMessage("No item selected.");
+        }
 
         ExecuteSearch();
     }
@@ -317,22 +321,22 @@ public class CustomerViewModel : INotifyPropertyChanged
     {
         if (string.IsNullOrWhiteSpace(_customerNumber))
         {
-            _logger.LogError("Customer number must be defined.");
+            _logger.LogMessage("Customer number must be defined.");
             return false;
         }
         if (string.IsNullOrWhiteSpace(_firstName))
         {
-            _logger.LogError("First name must be defined.");
+            _logger.LogMessage("First name must be defined.");
             return false;
         }
         if (string.IsNullOrWhiteSpace(_lastName))
         {
-            _logger.LogError("Last name must be defined.");
+            _logger.LogMessage("Last name must be defined.");
             return false;
         }
         if (!ValidateAddressInput())
         {
-            _logger.LogError("Address must be completely defined.");
+            _logger.LogMessage("Address must be completely defined.");
             return false;
         }
 
