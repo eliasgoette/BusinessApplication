@@ -4,7 +4,7 @@ using System.Xml.Serialization;
 
 public static class Serializer
 {
-    public static string ToJson<T>(List<T> items, bool indented = false)
+    public static string ToJson<T>(List<T> items, bool indented = true)
     {
         var options = new JsonSerializerOptions
         {
