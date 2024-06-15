@@ -18,8 +18,7 @@
             <ScrollViewer MaxHeight="300" 
                     VerticalScrollBarVisibility="Auto" 
                     HorizontalScrollBarVisibility="Auto" 
-                    CanContentScroll="True"
-                >
+                    CanContentScroll="True">
                 <TextBox Text="{Binding Result, Mode=OneWay}" IsReadOnly="True"/>
             </ScrollViewer>
             <Button Command="{Binding Save}">Save</Button>

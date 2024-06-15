@@ -4,6 +4,7 @@ using BusinessApplication.Repository;
 using BusinessApplication.View;
 using BusinessApplication.ViewModel;
 using System.ComponentModel;
+using System.Linq.Expressions;
 using System.Windows.Input;
 
 public class CustomerViewModel : INotifyPropertyChanged
@@ -15,6 +16,11 @@ public class CustomerViewModel : INotifyPropertyChanged
     private Customer? _selectedCustomer;
 
     private string? _searchCustomerNumber;
+    private DateTime _searchTemporalDate;
+    private string _searchTemporalHour;
+    private string _searchTemporalMinute;
+    private string _searchTemporalSecond;
+
     private string? _customerNumber;
     private string? _firstName;
     private string? _lastName;
@@ -28,19 +34,24 @@ public class CustomerViewModel : INotifyPropertyChanged
     private string? _customerAddressCity;
     private string? _customerAddressStreetAddress;
 
+
     public CustomerViewModel(IRepository<Customer> repository, ILogger logger)
     {
         _customerRepository = repository;
         _logger = logger;
-        _searchResults = _customerRepository.GetAll().ToList();
+
+        SetSearchDateTimeNow();
+        SearchResults = _customerRepository.GetAll().ToList();
 
         Search = new RelayCommand(ExecuteSearch);
+        ResetFilters = new RelayCommand(ExecuteResetFilters);
         ClearSelection = new RelayCommand(() => SelectedCustomer = null);
         Export = new RelayCommand(ExecuteExport);
         Add = new RelayCommand(() => ExecuteAdd());
         Update = new RelayCommand(ExecuteUpdate);
         Remove = new RelayCommand(ExecuteRemove);
     }
+
 
     public List<Customer> SearchResults
     {
@@ -75,6 +86,27 @@ public class CustomerViewModel : INotifyPropertyChanged
         }
     }
 
+
+    private void SetSearchDateTimeNow()
+    {
+        SearchTemporalDate = DateTime.Now;
+        SearchTemporalHour = FormatTimeSegment(DateTime.Now.Hour);
+        SearchTemporalMinute = FormatTimeSegment(DateTime.Now.Minute);
+        SearchTemporalSecond = FormatTimeSegment(DateTime.Now.Second + 1);
+    }
+
+    private static string FormatTimeSegment(int input)
+    {
+        string output = input.ToString();
+
+        if (input < 10)
+        {
+            output = "0" + output;
+        }
+
+        return output;
+    }
+
     public string? SearchCustomerNumber
     {
         get { return _searchCustomerNumber; }
@@ -84,6 +116,53 @@ public class CustomerViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(SearchCustomerNumber));
         }
     }
+
+    public DateTime SearchTemporalDate
+    {
+        get { return _searchTemporalDate; }
+        set
+        {
+            _searchTemporalDate = value;
+            OnPropertyChanged(nameof(SearchTemporalDate));
+        }
+    }
+
+    public string[] AvailableHours { get; } = Enumerable.Range(0, 24).Select(FormatTimeSegment).ToArray();
+
+    public string[] AvailableMinutes { get; } = Enumerable.Range(0, 60).Select(FormatTimeSegment).ToArray();
+
+    public string[] AvailableSeconds { get; } = Enumerable.Range(0, 60).Select(FormatTimeSegment).ToArray();
+
+    public string SearchTemporalHour
+    {
+        get { return _searchTemporalHour; }
+        set
+        {
+            _searchTemporalHour = value;
+            OnPropertyChanged(nameof(SearchTemporalHour));
+        }
+    }
+
+    public string SearchTemporalMinute
+    {
+        get { return _searchTemporalMinute; }
+        set
+        {
+            _searchTemporalMinute = value;
+            OnPropertyChanged(nameof(SearchTemporalMinute));
+        }
+    }
+
+    public string SearchTemporalSecond
+    {
+        get { return _searchTemporalSecond; }
+        set
+        {
+            _searchTemporalSecond = value;
+            OnPropertyChanged(nameof(SearchTemporalSecond));
+        }
+    }
+
 
     public string? CustomerNumber
     {
@@ -188,49 +267,67 @@ public class CustomerViewModel : INotifyPropertyChanged
     private void UpdateCustomerAddress()
     {
         if (
-            _customerAddressCountry != null
-            && _customerAddressZipCode != null
-            && _customerAddressCity != null
-            && _customerAddressStreetAddress != null
+            CustomerAddressCountry != null
+            && CustomerAddressZipCode != null
+            && CustomerAddressCity != null
+            && CustomerAddressStreetAddress != null
         )
         {
             if (_customerAddress != null)
             {
-                _customerAddress.Country = _customerAddressCountry;
-                _customerAddress.ZipCode = _customerAddressZipCode;
-                _customerAddress.City = _customerAddressCity;
-                _customerAddress.StreetAddress = _customerAddressStreetAddress;
+                _customerAddress.Country = CustomerAddressCountry;
+                _customerAddress.ZipCode = CustomerAddressZipCode;
+                _customerAddress.City = CustomerAddressCity;
+                _customerAddress.StreetAddress = CustomerAddressStreetAddress;
             }
             else
             {
                 _customerAddress = new Address
                 {
-                    Country = _customerAddressCountry,
-                    ZipCode = _customerAddressZipCode,
-                    City = _customerAddressCity,
-                    StreetAddress = _customerAddressStreetAddress
+                    Country = CustomerAddressCountry,
+                    ZipCode = CustomerAddressZipCode,
+                    City = CustomerAddressCity,
+                    StreetAddress = CustomerAddressStreetAddress
                 };
             }
         }
     }
 
+
     public ICommand Search { get; }
+    public ICommand ResetFilters { get; }
     public ICommand ClearSelection { get; }
     public ICommand Export { get; }
     public ICommand Add { get; }
     public ICommand Update { get; }
     public ICommand Remove { get; }
 
+
     private void ExecuteSearch()
     {
+        Expression<Func<Customer, bool>> predicate;
+
+        string temporalDateTimeString = SearchTemporalDate.Date.ToShortDateString();
+        temporalDateTimeString += $", {SearchTemporalHour}:{SearchTemporalMinute}:{SearchTemporalSecond}";
+
+        DateTime temporalDateTime = DateTime.Parse(temporalDateTimeString).ToUniversalTime();
+
         if (SearchCustomerNumber != null)
         {
-            SearchResults = _customerRepository.GetAllWhere(x => x.CustomerNumber.Contains(SearchCustomerNumber)).ToList();
+            predicate = x => x.CustomerNumber.Contains(SearchCustomerNumber);
         }
         else
         {
-            SearchResults = _customerRepository.GetAll().ToList();
+            predicate = x => true;
         }
+
+        SearchResults = _customerRepository.GetAllWhereAsOf(predicate, temporalDateTime);
+    }
+
+    private void ExecuteResetFilters()
+    {
+        SearchCustomerNumber = null;
+        SetSearchDateTimeNow();
     }
 
     private void ExecuteExport()
@@ -251,20 +348,21 @@ public class CustomerViewModel : INotifyPropertyChanged
             {
                 CustomerAddress = new Address
                 {
-                    Country = _customerAddressCountry,
-                    ZipCode = _customerAddressZipCode,
-                    City = _customerAddressCity,
-                    StreetAddress = _customerAddressStreetAddress
+                    Country = CustomerAddressCountry,
+                    ZipCode = CustomerAddressZipCode,
+                    City = CustomerAddressCity,
+                    StreetAddress = CustomerAddressStreetAddress
                 },
-                CustomerNumber = _customerNumber,
-                FirstName = _firstName,
-                LastName = _lastName,
-                Email = _email,
-                Website = _website,
-                PasswordHash = _password
+                CustomerNumber = CustomerNumber,
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                Website = Website,
+                PasswordHash = Password
             };
 
             await _customerRepository.AddAsync(newCustomer);
+            SetSearchDateTimeNow();
             ExecuteSearch();
         }
     }
@@ -273,28 +371,29 @@ public class CustomerViewModel : INotifyPropertyChanged
     {
         if (ValidateInput())
         {
-            SelectedCustomer.CustomerNumber = _customerNumber;
-            SelectedCustomer.FirstName = _firstName;
-            SelectedCustomer.LastName = _lastName;
-            SelectedCustomer.Email = _email;
-            SelectedCustomer.Website = _website;
-            SelectedCustomer.PasswordHash = _password;
+            SelectedCustomer.CustomerNumber = CustomerNumber;
+            SelectedCustomer.FirstName = FirstName;
+            SelectedCustomer.LastName = LastName;
+            SelectedCustomer.Email = Email;
+            SelectedCustomer.Website = Website;
+            SelectedCustomer.PasswordHash = Password;
 
-            SelectedCustomer.CustomerAddress.Country = _customerAddressCountry;
-            SelectedCustomer.CustomerAddress.ZipCode = _customerAddressZipCode;
-            SelectedCustomer.CustomerAddress.City = _customerAddressCity;
-            SelectedCustomer.CustomerAddress.StreetAddress = _customerAddressStreetAddress;
+            SelectedCustomer.CustomerAddress.Country = CustomerAddressCountry;
+            SelectedCustomer.CustomerAddress.ZipCode = CustomerAddressZipCode;
+            SelectedCustomer.CustomerAddress.City = CustomerAddressCity;
+            SelectedCustomer.CustomerAddress.StreetAddress = CustomerAddressStreetAddress;
 
             _customerRepository.Update(SelectedCustomer);
+            SetSearchDateTimeNow();
             ExecuteSearch();
         }
     }
 
     private void ExecuteRemove()
     {
-        if (_selectedCustomer != null)
+        if (SelectedCustomer != null)
         {
-            _customerRepository.Remove(_selectedCustomer);
+            _customerRepository.Remove(SelectedCustomer);
         }
         else
         {
@@ -306,17 +405,17 @@ public class CustomerViewModel : INotifyPropertyChanged
 
     private bool ValidateInput()
     {
-        if (string.IsNullOrWhiteSpace(_customerNumber))
+        if (string.IsNullOrWhiteSpace(CustomerNumber))
         {
             _logger.LogMessage("Customer number must be defined.");
             return false;
         }
-        if (string.IsNullOrWhiteSpace(_firstName))
+        if (string.IsNullOrWhiteSpace(FirstName))
         {
             _logger.LogMessage("First name must be defined.");
             return false;
         }
-        if (string.IsNullOrWhiteSpace(_lastName))
+        if (string.IsNullOrWhiteSpace(LastName))
         {
             _logger.LogMessage("Last name must be defined.");
             return false;
@@ -332,11 +431,12 @@ public class CustomerViewModel : INotifyPropertyChanged
 
     private bool ValidateAddressInput()
     {
-        return !string.IsNullOrWhiteSpace(_customerAddressCountry) &&
-               !string.IsNullOrWhiteSpace(_customerAddressZipCode) &&
-               !string.IsNullOrWhiteSpace(_customerAddressCity) &&
-               !string.IsNullOrWhiteSpace(_customerAddressStreetAddress);
+        return !string.IsNullOrWhiteSpace(CustomerAddressCountry) &&
+               !string.IsNullOrWhiteSpace(CustomerAddressZipCode) &&
+               !string.IsNullOrWhiteSpace(CustomerAddressCity) &&
+               !string.IsNullOrWhiteSpace(CustomerAddressStreetAddress);
     }
+
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
