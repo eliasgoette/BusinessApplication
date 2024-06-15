@@ -13,7 +13,7 @@
         <StackPanel>
             <TextBlock Style="{StaticResource Title}">Export Data</TextBlock>
             <DataGrid ItemsSource="{Binding Data}"></DataGrid>
-            <ComboBox Margin="5" ItemsSource="{Binding SelectedMode}"></ComboBox>
+            <ComboBox Margin="5" ItemsSource="{Binding AvailableModes}" SelectedIndex="{Binding SelectedMode}"></ComboBox>
             <Label Content="Preview"/>
             <ScrollViewer MaxHeight="300" 
                     VerticalScrollBarVisibility="Auto" 

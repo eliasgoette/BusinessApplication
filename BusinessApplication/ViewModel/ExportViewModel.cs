@@ -14,15 +14,16 @@ namespace BusinessApplication.ViewModel
     {
         private List<object> _data;
         private string _result = "";
-        private ExportMode _selectedMode = ExportMode.Json;
-        public event PropertyChangedEventHandler PropertyChanged;
+        private ExportMode _selectedMode;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public ExportViewModel(List<object> dataAsObjects)
         {
-            Save = new RelayCommand(ExecuteSave);
-
-            _data = dataAsObjects;
+            SelectedMode = (int)ExportMode.Json;
+            Data = dataAsObjects;
             ExecuteSerialization();
+
+            Save = new RelayCommand(ExecuteSave);
         }
 
         public List<object> Data
@@ -39,6 +40,8 @@ namespace BusinessApplication.ViewModel
             }
         }
 
+        public string[] AvailableModes { get; } = Enum.GetNames(typeof(ExportMode));
+
         public string Result
         {
             get { return _result; }
@@ -49,23 +52,22 @@ namespace BusinessApplication.ViewModel
             }
         }
 
-        public ExportMode SelectedMode
+        public int SelectedMode
         {
-            get { return _selectedMode; }
+            get { return Convert.ToInt32(_selectedMode); }
             set
             {
-                if (_selectedMode != value)
-                {
-                    _selectedMode = value;
-                    OnPropertyChanged(nameof(SelectedMode));
-                    ExecuteSerialization();
-                }
+                _selectedMode = (ExportMode)value;
+                OnPropertyChanged(nameof(SelectedMode));
+                ExecuteSerialization();
             }
         }
 
         private void ExecuteSerialization()
         {
-            if (SelectedMode == ExportMode.Json)
+            var mode = (ExportMode)SelectedMode;
+
+            if (mode == ExportMode.Json)
             {
                 Result = Serializer.ToJson(_data);
             }
@@ -88,8 +90,8 @@ namespace BusinessApplication.ViewModel
 
             if (result == true)
             {
-                // Save document
                 string filename = dialog.FileName;
+                // TODO: Save document
             }
         }
 
