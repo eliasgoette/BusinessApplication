@@ -335,7 +335,7 @@ public class CustomerViewModel : INotifyPropertyChanged
         if (_searchResults.Count <= 0) _logger.LogMessage("Nothing to export.");
         else
         {
-            var exportWindow = new ExportView(_searchResults.Select(x => (object)x).ToList());
+            var exportWindow = new ExportView(_searchResults);
             exportWindow.Show();
         }
     }

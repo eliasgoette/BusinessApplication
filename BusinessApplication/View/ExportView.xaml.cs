@@ -1,4 +1,5 @@
-﻿using BusinessApplication.ViewModel;
+﻿using BusinessApplication.Model;
+using BusinessApplication.ViewModel;
 using System.Windows;
 
 namespace BusinessApplication.View
@@ -8,10 +9,10 @@ namespace BusinessApplication.View
     /// </summary>
     public partial class ExportView : Window
     {
-        public ExportView(List<object> dataAsObjects)
+        public ExportView(List<Customer> data)
         {
             InitializeComponent();
-            DataContext = new ExportViewModel(dataAsObjects);
+            DataContext = new ExportViewModel(data);
         }
     }
 }

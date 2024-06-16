@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using BusinessApplication.Model;
+using Microsoft.Win32;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -12,21 +13,21 @@ namespace BusinessApplication.ViewModel
 
     public class ExportViewModel : INotifyPropertyChanged
     {
-        private List<object> _data;
+        private List<Customer> _data;
         private string _result = "";
         private ExportMode _selectedMode;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ExportViewModel(List<object> dataAsObjects)
+        public ExportViewModel(List<Customer> data)
         {
             SelectedMode = (int)ExportMode.Json;
-            Data = dataAsObjects;
+            Data = data;
             ExecuteSerialization();
 
             Save = new RelayCommand(ExecuteSave);
         }
 
-        public List<object> Data
+        public List<Customer> Data
         {
             get { return _data; }
             set

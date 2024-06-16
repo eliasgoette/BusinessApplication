@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace BusinessApplication.Model
 {
@@ -7,6 +9,8 @@ namespace BusinessApplication.Model
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [JsonIgnore]
+        [XmlIgnore]
         public int Id { get; set; }
 
         public required string Country { get; set; }

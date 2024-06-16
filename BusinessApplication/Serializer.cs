@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using BusinessApplication.Model;
+using System.IO;
 using System.Text.Json;
 using System.Xml.Serialization;
 
@@ -21,7 +22,8 @@ public static class Serializer
     public static string ToXml<T>(List<T> items)
     {
         var serializer = new XmlSerializer(typeof(List<T>));
-        using (var writer = new StringWriter())
+
+        using (StringWriter writer = new StringWriter())
         {
             serializer.Serialize(writer, items);
             return writer.ToString();
