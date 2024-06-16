@@ -12,7 +12,7 @@ namespace BusinessApplication.View
         public ExportView(List<Customer> data)
         {
             InitializeComponent();
-            DataContext = new ExportViewModel(data);
+            DataContext = new ExportViewModel(data, App.AppLogger);
         }
     }
 }

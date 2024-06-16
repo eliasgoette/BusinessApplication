@@ -1,6 +1,7 @@
 ﻿using BusinessApplication.Model;
 using Microsoft.Win32;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Input;
 
 namespace BusinessApplication.ViewModel
@@ -14,14 +15,17 @@ namespace BusinessApplication.ViewModel
     public class ExportViewModel : INotifyPropertyChanged
     {
         private List<Customer> _data;
+        private ILogger _logger;
         private string _result = "";
         private ExportMode _selectedMode;
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ExportViewModel(List<Customer> data)
+        public ExportViewModel(List<Customer> data, ILogger logger)
         {
             SelectedMode = (int)ExportMode.Json;
             Data = data;
+            _logger = logger;
             ExecuteSerialization();
 
             Save = new RelayCommand(ExecuteSave);
@@ -80,21 +84,28 @@ namespace BusinessApplication.ViewModel
 
         private void ExecuteSave()
         {
-            var fileTypeFilter = ((ExportMode)SelectedMode == ExportMode.Json) ? "JSON files (*.json)|*.json" : "XML files(*.xml) | *.xml";
-
-            var dialog = new SaveFileDialog
+            try
             {
-                FileName = "DataExport",
-                DefaultExt = SelectedMode.ToString().ToLower(),
-                Filter = fileTypeFilter
-            };
+                var fileTypeFilter = ((ExportMode)SelectedMode == ExportMode.Json) ? "JSON files (*.json)|*.json" : "XML files(*.xml) | *.xml";
 
-            bool result = dialog.ShowDialog() ?? false;
+                var dialog = new SaveFileDialog
+                {
+                    FileName = "DataExport",
+                    DefaultExt = SelectedMode.ToString().ToLower(),
+                    Filter = fileTypeFilter
+                };
 
-            if (result)
+                bool result = dialog.ShowDialog() ?? false;
+
+                if (result)
+                {
+                    string filename = dialog.FileName;
+                    File.WriteAllText(filename, Result);
+                }
+            }
+            catch (Exception ex)
             {
-                string filename = dialog.FileName;
-                // TODO: Save document
+                _logger.LogError(ex.Message);
             }
         }
 
