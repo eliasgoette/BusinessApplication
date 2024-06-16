@@ -80,16 +80,18 @@ namespace BusinessApplication.ViewModel
 
         private void ExecuteSave()
         {
+            var fileTypeFilter = ((ExportMode)SelectedMode == ExportMode.Json) ? "JSON files (*.json)|*.json" : "XML files(*.xml) | *.xml";
+
             var dialog = new SaveFileDialog
             {
                 FileName = "DataExport",
                 DefaultExt = SelectedMode.ToString().ToLower(),
-                Filter = "JSON files (*.json)|*.json|XML files (*.xml)|*.xml"
+                Filter = fileTypeFilter
             };
 
-            bool? result = dialog.ShowDialog();
+            bool result = dialog.ShowDialog() ?? false;
 
-            if (result == true)
+            if (result)
             {
                 string filename = dialog.FileName;
                 // TODO: Save document

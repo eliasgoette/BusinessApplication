@@ -5,8 +5,6 @@ using System.Xml.Serialization;
 
 namespace BusinessApplication.Model
 {
-    [XmlInclude(typeof(Customer))]
-    [XmlRoot(nameof(Customer))]
     public class Customer
     {
         [Key]
@@ -14,7 +12,6 @@ namespace BusinessApplication.Model
         [JsonIgnore]
         [XmlIgnore]
         public int Id { get; set; }
-        [XmlElement(nameof(CustomerAddress))]
         public required virtual Address CustomerAddress { get; set; }
         public required string CustomerNumber { get; set; }
         public required string FirstName { get; set; }
