@@ -19,8 +19,6 @@ namespace BusinessApplication.ViewModel
         private string _result = "";
         private ExportMode _selectedMode;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         public ExportViewModel(List<Customer> data, ILogger logger)
         {
             SelectedMode = (int)ExportMode.Json;
@@ -110,6 +108,8 @@ namespace BusinessApplication.ViewModel
         }
 
         public ICommand Save { get; }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
