@@ -47,6 +47,7 @@ public class CustomerViewModel : INotifyPropertyChanged
         ResetFilters = new RelayCommand(ExecuteResetFilters);
         ClearSelection = new RelayCommand(() => SelectedCustomer = null);
         Export = new RelayCommand(ExecuteExport);
+        Import = new RelayCommand(ExecuteImport);
         Add = new RelayCommand(() => ExecuteAdd());
         Update = new RelayCommand(ExecuteUpdate);
         Remove = new RelayCommand(ExecuteRemove);
@@ -298,6 +299,7 @@ public class CustomerViewModel : INotifyPropertyChanged
     public ICommand ResetFilters { get; }
     public ICommand ClearSelection { get; }
     public ICommand Export { get; }
+    public ICommand Import { get; }
     public ICommand Add { get; }
     public ICommand Update { get; }
     public ICommand Remove { get; }
@@ -338,6 +340,12 @@ public class CustomerViewModel : INotifyPropertyChanged
             var exportWindow = new ExportView(_searchResults);
             exportWindow.Show();
         }
+    }
+
+    private void ExecuteImport()
+    {
+        var importWindow = new ImportView();
+        importWindow.Show();
     }
 
     private async Task ExecuteAdd()
