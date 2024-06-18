@@ -1,16 +1,20 @@
 ﻿using BusinessApplication.Model;
+using Microsoft.Win32;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Input;
 
 namespace BusinessApplication.ViewModel
 {
     public class ImportViewModel : INotifyPropertyChanged
     {
+        private ILogger _logger;
         private string _filePath = "";
         private List<Customer> _data = [];
 
-        public ImportViewModel()
+        public ImportViewModel(ILogger logger)
         {
+            _logger = logger;
             Browse = new RelayCommand(ExecuteBrowse);
             Confirm = new RelayCommand(ExecuteConfirm);
         }
@@ -24,22 +28,66 @@ namespace BusinessApplication.ViewModel
                 OnPropertyChanged(nameof(FilePath));
             }
         }
-        public List<Customer> Data => _data;
+
+        public List<Customer> Data
+        {
+            get => _data;
+            set
+            {
+                _data = value;
+                OnPropertyChanged(nameof(Data));
+            }
+        }
 
         public void ExecuteBrowse()
         {
-            var fileTypeFilters = "JSON files (*.json)|*.json|XML files(*.xml) | *.xml";
-
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.FileName = "";
-            dialog.DefaultExt = ".json";
-            dialog.Filter = fileTypeFilters;
-
-            bool? result = dialog.ShowDialog();
-
-            if (result == true)
+            try
             {
-                FilePath = dialog.FileName;
+                var fileTypeFilters = "JSON files (*.json)|*.json|XML files(*.xml)|*.xml";
+
+                var dialog = new OpenFileDialog
+                {
+                    FileName = "",
+                    DefaultExt = ".json",
+                    Filter = fileTypeFilters
+                };
+
+                bool result = dialog.ShowDialog() ?? false;
+
+                if (result)
+                {
+                    FilePath = dialog.FileName;
+
+                    if (File.Exists(FilePath))
+                    {
+                        var fileEnding = FilePath.Split('.').LastOrDefault()?.ToLower();
+
+                        switch (fileEnding)
+                        {
+                            case "json":
+                                string json = File.ReadAllText(FilePath);
+                                Data = Serializer.FromJson<Customer>(json);
+                                break;
+
+                            case "xml":
+                                string xml = File.ReadAllText(FilePath);
+                                Data = Serializer.FromXml<Customer>(xml);
+                                break;
+
+                            default:
+                                _logger.LogMessage("Wrong file extension.");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogMessage("File doesn't exist.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
             }
         }
 
@@ -47,7 +95,7 @@ namespace BusinessApplication.ViewModel
         {
 
         }
-        
+
         public ICommand Browse { get; }
         public ICommand Confirm { get; }
 

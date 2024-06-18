@@ -11,7 +11,7 @@ namespace BusinessApplication.View
         public ImportView()
         {
             InitializeComponent();
-            DataContext = new ImportViewModel();
+            DataContext = new ImportViewModel(App.AppLogger);
         }
     }
 }
