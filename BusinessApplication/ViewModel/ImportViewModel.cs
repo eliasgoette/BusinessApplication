@@ -116,6 +116,8 @@ namespace BusinessApplication.ViewModel
             }
 
             ConfirmIsEnabled = true;
+
+            // TODO: Close window
         }
 
         public ICommand Browse { get; }

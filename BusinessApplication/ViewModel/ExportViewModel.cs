@@ -99,6 +99,8 @@ namespace BusinessApplication.ViewModel
                 {
                     string filename = dialog.FileName;
                     File.WriteAllText(filename, Result);
+
+                    // TODO: Close window
                 }
             }
             catch (Exception ex)

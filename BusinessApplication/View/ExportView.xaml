@@ -15,10 +15,7 @@
             <DataGrid ItemsSource="{Binding Data}"></DataGrid>
             <ComboBox ItemsSource="{Binding AvailableModes}" SelectedIndex="{Binding SelectedMode}"></ComboBox>
             <Label Content="Preview"/>
-            <ScrollViewer MaxHeight="300" 
-                    VerticalScrollBarVisibility="Auto" 
-                    HorizontalScrollBarVisibility="Auto" 
-                    CanContentScroll="True">
+            <ScrollViewer MaxHeight="300">
                 <TextBox Text="{Binding Result, Mode=OneWay}" IsReadOnly="True"/>
             </ScrollViewer>
             <Button Command="{Binding Save}" Content="Save"/>
