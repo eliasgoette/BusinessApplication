@@ -1,4 +1,6 @@
-﻿using BusinessApplication.ViewModel;
+﻿using BusinessApplication.Model;
+using BusinessApplication.Repository;
+using BusinessApplication.ViewModel;
 using System.Windows;
 
 namespace BusinessApplication.View
@@ -11,7 +13,8 @@ namespace BusinessApplication.View
         public ImportView()
         {
             InitializeComponent();
-            DataContext = new ImportViewModel(App.AppLogger);
+            var customerRepository = new Repository<Customer>(() => new AppDbContext(), App.AppLogger);
+            DataContext = new ImportViewModel(App.AppLogger, customerRepository);
         }
     }
 }

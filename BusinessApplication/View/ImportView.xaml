@@ -19,7 +19,7 @@
             </StackPanel>
             <Label Content="Preview"/>
             <DataGrid ItemsSource="{Binding Data}"></DataGrid>
-            <Button Command="{Binding Confirm}">Confirm</Button>
+            <Button Command="{Binding Confirm}" IsEnabled="{Binding ConfirmIsEnabled}">Confirm</Button>
         </StackPanel>
     </Grid>
 </Window>

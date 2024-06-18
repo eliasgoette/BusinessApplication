@@ -1,4 +1,5 @@
 ﻿using BusinessApplication.Model;
+using BusinessApplication.Repository;
 using Microsoft.Win32;
 using System.ComponentModel;
 using System.IO;
@@ -9,12 +10,15 @@ namespace BusinessApplication.ViewModel
     public class ImportViewModel : INotifyPropertyChanged
     {
         private ILogger _logger;
+        private IRepository<Customer> _repository;
         private string _filePath = "";
         private List<Customer> _data = [];
+        private bool _confirmIsEnabled = false;
 
-        public ImportViewModel(ILogger logger)
+        public ImportViewModel(ILogger logger, IRepository<Customer> repository)
         {
             _logger = logger;
+            _repository = repository;
             Browse = new RelayCommand(ExecuteBrowse);
             Confirm = new RelayCommand(ExecuteConfirm);
         }
@@ -39,7 +43,17 @@ namespace BusinessApplication.ViewModel
             }
         }
 
-        public void ExecuteBrowse()
+        public bool ConfirmIsEnabled
+        {
+            get => _confirmIsEnabled;
+            set
+            {
+                _confirmIsEnabled = value;
+                OnPropertyChanged(nameof(ConfirmIsEnabled));
+            }
+        }
+
+        private void ExecuteBrowse()
         {
             try
             {
@@ -61,17 +75,18 @@ namespace BusinessApplication.ViewModel
                     if (File.Exists(FilePath))
                     {
                         var fileEnding = FilePath.Split('.').LastOrDefault()?.ToLower();
+                        var fileContent = File.ReadAllText(FilePath);
 
                         switch (fileEnding)
                         {
                             case "json":
-                                string json = File.ReadAllText(FilePath);
-                                Data = Serializer.FromJson<Customer>(json);
+                                Data = Serializer.FromJson<Customer>(fileContent);
+                                ConfirmIsEnabled = true;
                                 break;
 
                             case "xml":
-                                string xml = File.ReadAllText(FilePath);
-                                Data = Serializer.FromXml<Customer>(xml);
+                                Data = Serializer.FromXml<Customer>(fileContent);
+                                ConfirmIsEnabled = true;
                                 break;
 
                             default:
@@ -91,9 +106,16 @@ namespace BusinessApplication.ViewModel
             }
         }
 
-        public void ExecuteConfirm()
+        private async void ExecuteConfirm()
         {
+            ConfirmIsEnabled = false;
 
+            foreach (var item in Data)
+            {
+                await _repository.AddAsync(item);
+            }
+
+            ConfirmIsEnabled = true;
         }
 
         public ICommand Browse { get; }

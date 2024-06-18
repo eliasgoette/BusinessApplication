@@ -21,7 +21,7 @@
                     CanContentScroll="True">
                 <TextBox Text="{Binding Result, Mode=OneWay}" IsReadOnly="True"/>
             </ScrollViewer>
-            <Button Command="{Binding Save}">Save</Button>
+            <Button Command="{Binding Save}" Content="Save"/>
         </StackPanel>
     </Grid>
 </Window>
