@@ -8,17 +8,17 @@
     </Style>
     <Style TargetType="TextBlock">
         <Setter Property="Margin" Value="5"/>
-        <Setter Property="Padding" Value="2.5"/>
+        <Setter Property="Padding" Value="5"/>
     </Style>
     <Style TargetType="DataGrid">
         <Setter Property="Margin" Value="5"/>
-        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Padding" Value="0"/>
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="SelectionMode" Value="Single"/>
     </Style>
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="5"/>
-        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Padding" Value="2.5"/>
     </Style>
     <Style TargetType="TextBlock" x:Key="Title">
         <Setter Property="Margin" Value="0 5"/>
