@@ -26,7 +26,7 @@ public class CustomerViewModel : INotifyPropertyChanged
     private string? _lastName;
     private string? _email;
     private string? _website;
-    private string? _password;
+    private string? _passwordHash;
 
     private Address? _customerAddress;
     private string? _customerAddressCountry;
@@ -77,7 +77,7 @@ public class CustomerViewModel : INotifyPropertyChanged
             LastName = value?.LastName;
             Email = value?.Email;
             Website = value?.Website;
-            Password = value?.PasswordHash;
+            PasswordHash = value?.PasswordHash;
 
             var address = value?.CustomerAddress;
             CustomerAddressCountry = address?.Country;
@@ -215,13 +215,13 @@ public class CustomerViewModel : INotifyPropertyChanged
         }
     }
 
-    public string? Password
+    public string? PasswordHash
     {
-        get { return _password; }
+        get { return _passwordHash; }
         set
         {
-            _password = value;
-            OnPropertyChanged(nameof(Password));
+            _passwordHash = value;
+            OnPropertyChanged(nameof(PasswordHash));
         }
     }
 
@@ -366,7 +366,7 @@ public class CustomerViewModel : INotifyPropertyChanged
                 LastName = LastName,
                 Email = Email,
                 Website = Website,
-                PasswordHash = Password
+                PasswordHash = PasswordHash
             };
 
             await _customerRepository.AddAsync(newCustomer);
@@ -384,7 +384,7 @@ public class CustomerViewModel : INotifyPropertyChanged
             SelectedCustomer.LastName = LastName;
             SelectedCustomer.Email = Email;
             SelectedCustomer.Website = Website;
-            SelectedCustomer.PasswordHash = Password;
+            SelectedCustomer.PasswordHash = PasswordHash;
 
             SelectedCustomer.CustomerAddress.Country = CustomerAddressCountry;
             SelectedCustomer.CustomerAddress.ZipCode = CustomerAddressZipCode;

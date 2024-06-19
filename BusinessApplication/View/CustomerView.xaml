@@ -76,8 +76,8 @@
             <TextBox Text="{Binding Email}"></TextBox>
             <Label>Website</Label>
             <TextBox Text="{Binding Website}"></TextBox>
-            <Label>Password</Label>
-            <TextBox Text="{Binding Password}"></TextBox>
+            <Label>PasswordHash</Label>
+            <TextBox Text="{Binding PasswordHash}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Column="2">
             <Label>Country</Label>

@@ -30,6 +30,7 @@ namespace BusinessApplication.ViewModel
             {
                 _filePath = value;
                 OnPropertyChanged(nameof(FilePath));
+                LoadDataFromPath();
             }
         }
 
@@ -71,37 +72,50 @@ namespace BusinessApplication.ViewModel
                 if (result)
                 {
                     FilePath = dialog.FileName;
-
-                    if (File.Exists(FilePath))
-                    {
-                        var fileEnding = FilePath.Split('.').LastOrDefault()?.ToLower();
-                        var fileContent = File.ReadAllText(FilePath);
-
-                        switch (fileEnding)
-                        {
-                            case "json":
-                                Data = Serializer.FromJson<Customer>(fileContent);
-                                ConfirmIsEnabled = true;
-                                break;
-
-                            case "xml":
-                                Data = Serializer.FromXml<Customer>(fileContent);
-                                ConfirmIsEnabled = true;
-                                break;
-
-                            default:
-                                _logger.LogMessage("Wrong file extension.");
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        _logger.LogMessage("File doesn't exist.");
-                    }
                 }
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
+            }
+        }
+
+        private void LoadDataFromPath()
+        {
+            try
+            {
+                if (File.Exists(FilePath))
+                {
+                    var fileEnding = FilePath.Split('.').LastOrDefault()?.ToLower();
+                    var fileContent = File.ReadAllText(FilePath);
+
+                    switch (fileEnding)
+                    {
+                        case "json":
+                            Data = Serializer.FromJson<Customer>(fileContent);
+                            ConfirmIsEnabled = true;
+                            break;
+
+                        case "xml":
+                            Data = Serializer.FromXml<Customer>(fileContent);
+                            ConfirmIsEnabled = true;
+                            break;
+
+                        default:
+                            Data = [];
+                            _logger.LogMessage("Wrong file extension.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Data = [];
+                    _logger.LogMessage("File doesn't exist.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Data = [];
                 _logger.LogError(ex.Message);
             }
         }
