@@ -1,4 +1,5 @@
 ﻿using BusinessApplication.Model;
+using BusinessApplication.Repository;
 using Microsoft.Win32;
 using System.ComponentModel;
 using System.IO;
@@ -14,22 +15,30 @@ namespace BusinessApplication.ViewModel
 
     public class ExportViewModel : INotifyPropertyChanged
     {
-        private List<Customer> _data;
+        private IRepository<Customer> _repository;
         private ILogger _logger;
-        private string _result = "";
+        private List<Customer>? _data;
         private ExportMode _selectedMode;
+        private string _result = "";
 
-        public ExportViewModel(List<Customer> data, ILogger logger)
+        private DateTime _searchTemporalDate;
+        private string _searchTemporalHour;
+        private string _searchTemporalMinute;
+        private string _searchTemporalSecond;
+
+        public ExportViewModel(IRepository<Customer> repository, ILogger logger)
         {
-            SelectedMode = (int)ExportMode.Json;
-            Data = data;
+            _repository = repository;
             _logger = logger;
-            ExecuteSerialization();
+            Data = _repository.GetAll().ToList();
+            SetSearchDateTimeNow();
+            SelectedMode = (int)ExportMode.Json;
 
+            ResetFilters = new RelayCommand(ExecuteResetFilters);
             Save = new RelayCommand(ExecuteSave);
         }
 
-        public List<Customer> Data
+        public List<Customer>? Data
         {
             get { return _data; }
             set
@@ -38,12 +47,23 @@ namespace BusinessApplication.ViewModel
                 {
                     _data = value;
                     OnPropertyChanged(nameof(Data));
-                    ExecuteSerialization();
                 }
             }
         }
 
         public string[] AvailableModes { get; } = Enum.GetNames(typeof(ExportMode));
+
+        public int SelectedMode
+        {
+            get { return Convert.ToInt32(_selectedMode); }
+            set
+            {
+                _selectedMode = (ExportMode)value;
+                OnPropertyChanged(nameof(SelectedMode));
+                ExecuteSearch();
+                ExecuteSerialization();
+            }
+        }
 
         public string Result
         {
@@ -55,28 +75,115 @@ namespace BusinessApplication.ViewModel
             }
         }
 
-        public int SelectedMode
+
+        public DateTime SearchTemporalDate
         {
-            get { return Convert.ToInt32(_selectedMode); }
+            get { return _searchTemporalDate; }
             set
             {
-                _selectedMode = (ExportMode)value;
-                OnPropertyChanged(nameof(SelectedMode));
+                _searchTemporalDate = value;
+                OnPropertyChanged(nameof(SearchTemporalDate));
+            }
+        }
+
+        public string[] AvailableHours { get; } = Enumerable.Range(0, 24).Select(FormatTimeSegment).ToArray();
+
+        public string[] AvailableMinutes { get; } = Enumerable.Range(0, 60).Select(FormatTimeSegment).ToArray();
+
+        public string[] AvailableSeconds { get; } = Enumerable.Range(0, 60).Select(FormatTimeSegment).ToArray();
+
+        public string SearchTemporalHour
+        {
+            get { return _searchTemporalHour; }
+            set
+            {
+                _searchTemporalHour = value;
+                OnPropertyChanged(nameof(SearchTemporalHour));
                 ExecuteSerialization();
+            }
+        }
+
+        public string SearchTemporalMinute
+        {
+            get { return _searchTemporalMinute; }
+            set
+            {
+                _searchTemporalMinute = value;
+                OnPropertyChanged(nameof(SearchTemporalMinute));
+                ExecuteSerialization();
+            }
+        }
+
+        public string SearchTemporalSecond
+        {
+            get { return _searchTemporalSecond; }
+            set
+            {
+                _searchTemporalSecond = value;
+                OnPropertyChanged(nameof(SearchTemporalSecond));
+                ExecuteSerialization();
+            }
+        }
+
+        private void SetSearchDateTimeNow()
+        {
+            SearchTemporalDate = DateTime.Now;
+            SearchTemporalHour = FormatTimeSegment(DateTime.Now.Hour);
+            SearchTemporalMinute = FormatTimeSegment(DateTime.Now.Minute);
+            SearchTemporalSecond = FormatTimeSegment(DateTime.Now.Second + 1);
+        }
+
+        private static string FormatTimeSegment(int input)
+        {
+            string output = input.ToString();
+
+            if (input < 10)
+            {
+                output = "0" + output;
+            }
+
+            return output;
+        }
+
+
+        private void ExecuteResetFilters()
+        {
+            SetSearchDateTimeNow();
+        }
+
+        private void ExecuteSearch()
+        {
+            string temporalDateTimeString = SearchTemporalDate.Date.ToShortDateString();
+
+            if (SearchTemporalHour != null && SearchTemporalMinute != null && SearchTemporalSecond != null)
+            {
+                temporalDateTimeString += $", {SearchTemporalHour}:{SearchTemporalMinute}:{SearchTemporalSecond}";
+
+                DateTime temporalDateTime = DateTime.Parse(temporalDateTimeString).ToUniversalTime();
+                Data = _repository.GetAllWhereAsOf(x => true, temporalDateTime);
             }
         }
 
         private void ExecuteSerialization()
         {
-            var mode = (ExportMode)SelectedMode;
+            ExecuteSearch();
 
-            if (mode == ExportMode.Json)
+            if (Data == null || Data?.Count <= 0)
             {
-                Result = CustomerSerializer.ToJson(_data);
+                _logger.LogMessage("Nothing to export.");
             }
             else
             {
-                Result = CustomerSerializer.ToXml(_data);
+                var mode = (ExportMode)SelectedMode;
+
+                if (mode == ExportMode.Json)
+                {
+                    Result = CustomerSerializer.ToJson(Data);
+                }
+                else
+                {
+                    Result = CustomerSerializer.ToXml(Data);
+                }
             }
         }
 
@@ -109,6 +216,7 @@ namespace BusinessApplication.ViewModel
             }
         }
 
+        public ICommand ResetFilters { get; }
         public ICommand Save { get; }
 
         public event PropertyChangedEventHandler? PropertyChanged;

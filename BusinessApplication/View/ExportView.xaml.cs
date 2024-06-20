@@ -1,4 +1,5 @@
 ﻿using BusinessApplication.Model;
+using BusinessApplication.Repository;
 using BusinessApplication.ViewModel;
 using System.Windows;
 
@@ -9,10 +10,11 @@ namespace BusinessApplication.View
     /// </summary>
     public partial class ExportView : Window
     {
-        public ExportView(List<Customer> data)
+        public ExportView()
         {
             InitializeComponent();
-            DataContext = new ExportViewModel(data, App.AppLogger);
+            var customerRepository = new Repository<Customer>(() => new AppDbContext(), App.AppLogger);
+            DataContext = new ExportViewModel(customerRepository, App.AppLogger);
         }
     }
 }
