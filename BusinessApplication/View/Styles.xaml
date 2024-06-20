@@ -12,11 +12,8 @@
     </Style>
     <Style TargetType="DataGrid">
         <Setter Property="Margin" Value="5"/>
-        <Setter Property="Padding" Value="0"/>
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="SelectionMode" Value="Single"/>
-        <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
-        <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
     </Style>
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="5"/>
@@ -38,7 +35,6 @@
         <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="CanContentScroll" Value="False"/>
-        <Setter Property="Margin" Value="5"/>
-        <Setter Property="MaxHeight" Value="200"/>
+        <Setter Property="MaxHeight" Value="250"/>
     </Style>
 </ResourceDictionary>

@@ -168,11 +168,7 @@ namespace BusinessApplication.ViewModel
         {
             ExecuteSearch();
 
-            if (Data == null || Data?.Count <= 0)
-            {
-                _logger.LogMessage("Nothing to export.");
-            }
-            else
+            if (Data != null && Data?.Count > 0)
             {
                 var mode = (ExportMode)SelectedMode;
 
@@ -184,6 +180,10 @@ namespace BusinessApplication.ViewModel
                 {
                     Result = CustomerSerializer.ToXml(Data);
                 }
+            }
+            else
+            {
+                Result = "";
             }
         }
 

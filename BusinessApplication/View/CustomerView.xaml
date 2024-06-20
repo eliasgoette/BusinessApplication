@@ -29,15 +29,13 @@
                 <Label>Customer Number</Label>
                 <TextBox Text="{Binding SearchCustomerNumber}"></TextBox>
             </StackPanel>
-            <ScrollViewer>
-                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedCustomer}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Customer Number" Binding="{Binding CustomerNumber}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </ScrollViewer>
+            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedCustomer}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Customer Number" Binding="{Binding CustomerNumber}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
         <StackPanel Grid.Row="1">
             <Button Command="{Binding Search}">Search</Button>
