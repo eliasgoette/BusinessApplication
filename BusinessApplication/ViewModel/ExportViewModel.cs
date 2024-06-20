@@ -72,11 +72,11 @@ namespace BusinessApplication.ViewModel
 
             if (mode == ExportMode.Json)
             {
-                Result = Serializer.ToJson(_data);
+                Result = CustomerSerializer.ToJson(_data);
             }
             else
             {
-                Result = Serializer.ToXml(_data);
+                Result = CustomerSerializer.ToXml(_data);
             }
         }
 

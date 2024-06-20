@@ -92,12 +92,12 @@ namespace BusinessApplication.ViewModel
                     switch (fileEnding)
                     {
                         case "json":
-                            Data = Serializer.FromJson<Customer>(fileContent);
+                            Data = CustomerSerializer.FromJson(fileContent);
                             ConfirmIsEnabled = true;
                             break;
 
                         case "xml":
-                            Data = Serializer.FromXml<Customer>(fileContent);
+                            Data = CustomerSerializer.FromXml(fileContent);
                             ConfirmIsEnabled = true;
                             break;
 

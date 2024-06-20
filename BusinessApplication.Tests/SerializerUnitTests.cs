@@ -29,7 +29,7 @@ namespace BusinessApplication.Tests
             ]";
 
 
-            var json = Serializer.ToJson(addresses);
+            var json = CustomerSerializer.ToJson(addresses);
 
 
             Assert.AreEqual(

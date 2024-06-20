@@ -49,9 +49,8 @@
                     <ComboBox Margin="5" Grid.Column="1" Grid.Row="3" ItemsSource="{Binding AvailableMinutes}" SelectedItem="{Binding SearchTemporalMinute}" IsEditable="True"></ComboBox>
                     <ComboBox Margin="5" Grid.Column="2" Grid.Row="3" ItemsSource="{Binding AvailableSeconds}" SelectedItem="{Binding SearchTemporalSecond}" IsEditable="True"></ComboBox>
                 </Grid>
-                <Button Command="{Binding Search}">Search</Button>
             </StackPanel>
-            <ScrollViewer MaxHeight="300">
+            <ScrollViewer>
                 <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedCustomer}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Customer Number" Binding="{Binding CustomerNumber}"></DataGridTextColumn>
@@ -62,6 +61,7 @@
             </ScrollViewer>
         </StackPanel>
         <StackPanel Grid.Row="1">
+            <Button Command="{Binding Search}">Search</Button>
             <Button Command="{Binding ResetFilters}">Reset Filters</Button>
             <Button Command="{Binding ClearSelection}">Clear Selection</Button>
         </StackPanel>

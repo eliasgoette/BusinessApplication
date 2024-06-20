@@ -15,6 +15,8 @@
         <Setter Property="Padding" Value="0"/>
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
     </Style>
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="5"/>
@@ -35,7 +37,8 @@
     <Style TargetType="ScrollViewer">
         <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
-        <Setter Property="CanContentScroll" Value="True"/>
+        <Setter Property="CanContentScroll" Value="False"/>
         <Setter Property="Margin" Value="5"/>
+        <Setter Property="MaxHeight" Value="200"/>
     </Style>
 </ResourceDictionary>
