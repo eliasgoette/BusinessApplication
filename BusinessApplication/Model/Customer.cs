@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using System.Xml.Serialization;
 
 namespace BusinessApplication.Model
 {
@@ -10,10 +9,8 @@ namespace BusinessApplication.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [JsonIgnore]
-        [XmlIgnore]
         public int Id { get; set; }
         public required virtual Address CustomerAddress { get; set; }
-        [XmlAttribute(nameof(CustomerNumber))]
         public required string CustomerNumber { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
