@@ -16,7 +16,7 @@ public static class CustomerSerializer
 
     public static List<Customer> FromJson(string json)
     {
-        return JsonSerializer.Deserialize<List<Customer>>(json) ?? new List<Customer>();
+        return JsonSerializer.Deserialize<List<Customer>>(json) ?? [];
     }
 
     public static string ToXml(List<Customer> items)

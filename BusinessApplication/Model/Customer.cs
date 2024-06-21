@@ -13,6 +13,7 @@ namespace BusinessApplication.Model
         [XmlIgnore]
         public int Id { get; set; }
         public required virtual Address CustomerAddress { get; set; }
+        [XmlAttribute(nameof(CustomerNumber))]
         public required string CustomerNumber { get; set; }
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
