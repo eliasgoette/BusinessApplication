@@ -1,6 +1,6 @@
 ﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
-using System.Linq.Expressions;
+using BusinessApplication.Utility;
 using System.Windows.Controls;
 
 namespace BusinessApplication.View

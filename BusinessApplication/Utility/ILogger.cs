@@ -1,4 +1,4 @@
-﻿namespace BusinessApplication
+﻿namespace BusinessApplication.Utility
 {
     public interface ILogger
     {

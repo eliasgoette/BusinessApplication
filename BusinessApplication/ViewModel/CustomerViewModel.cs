@@ -1,6 +1,6 @@
-﻿using BusinessApplication;
-using BusinessApplication.Model;
+﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
+using BusinessApplication.Utility;
 using BusinessApplication.View;
 using BusinessApplication.ViewModel;
 using System.ComponentModel;

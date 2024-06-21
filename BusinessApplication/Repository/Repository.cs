@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BusinessApplication.Utility;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
 
