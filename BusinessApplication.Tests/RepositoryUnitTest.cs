@@ -1,5 +1,7 @@
 ﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
+using BusinessApplication.Utility;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessApplication.Tests
 {
@@ -34,8 +36,8 @@ namespace BusinessApplication.Tests
             };
 
             var logger = new Logger();
-            customerRepository = new Repository<Customer>(() => new AppDbContext(), logger);
-            addressRepository = new Repository<Address>(() => new AppDbContext(), logger);
+            customerRepository = new Repository<Customer>(() => new AppDbContextStub(), logger);
+            addressRepository = new Repository<Address>(() => new AppDbContextStub(), logger);
         }
 
         [TestMethod]
@@ -94,5 +96,11 @@ namespace BusinessApplication.Tests
 
             Assert.IsNull(customerRepository.GetAllWhere(x => x.Id == customer.Id).FirstOrDefault());
         }
+    }
+
+    public class AppDbContextStub : DbContext
+    {
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Address> Addresses { get; set; }
     }
 }
