@@ -23,7 +23,7 @@ namespace BusinessApplication.Model
         [NotMapped]
         public string Name
         {
-            get => $"{FirstName} {LastName}";
+            get => $"{FirstName ?? ""} {LastName ?? ""}";
             set
             {
                 var parts = value.Split(' ');
