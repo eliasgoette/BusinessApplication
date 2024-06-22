@@ -23,95 +23,29 @@ public static class CustomerSerializer
 
     public static string ToXml(List<Customer> items)
     {
-        var serializer = new XmlSerializer(typeof(CustomersXmlDto));
+        var serializer = new XmlSerializer(typeof(Customers));
 
         using (var writer = new StringWriter())
         {
-            var dtoList = items.ConvertAll(x => new CustomerXmlDto(x));
-            serializer.Serialize(writer, new CustomersXmlDto { Items = dtoList });
+            serializer.Serialize(writer, new Customers { Items = items });
             return writer.ToString();
         }
     }
 
     public static List<Customer> FromXml(string xml)
     {
-        var serializer = new XmlSerializer(typeof(CustomersXmlDto));
+        var serializer = new XmlSerializer(typeof(Customers));
         using (var reader = new StringReader(xml))
         {
-            var customersObj = serializer.Deserialize(reader) as CustomersXmlDto;
-            return customersObj?.Items.Select(x => x.ToCustomer()).ToList() ?? new List<Customer>();
+            var customersObj = serializer.Deserialize(reader) as Customers;
+            return customersObj?.Items ?? new List<Customer>();
         }
     }
 
-    [XmlRoot("Customers")]
-    public class CustomersXmlDto
+    //[XmlRoot("Customers")]
+    public class Customers
     {
         [XmlElement("Customer")]
-        public List<CustomerXmlDto> Items { get; set; } = new List<CustomerXmlDto>();
-    }
-
-    public class CustomerXmlDto
-    {
-        public CustomerXmlDto() { }
-
-        public CustomerXmlDto(Customer customer)
-        {
-            Id = customer.Id;
-            CustomerAddress = customer.CustomerAddress;
-            CustomerNumber = customer.CustomerNumber;
-            FirstName = customer.FirstName;
-            LastName = customer.LastName;
-            Email = customer.Email;
-            Website = customer.Website;
-            PasswordHash = customer.PasswordHash;
-        }
-
-        [XmlIgnore]
-        public int Id { get; set; }
-
-        public Address CustomerAddress { get; set; }
-
-        [XmlAttribute(nameof(CustomerNumber))]
-        public string CustomerNumber { get; set; }
-
-        [XmlIgnore]
-        public string FirstName { get; set; }
-
-        [XmlIgnore]
-        public string LastName { get; set; }
-
-        [XmlElement("Name")]
-        public string Name
-        {
-            get => $"{FirstName} {LastName}";
-            set
-            {
-                var parts = value.Split(' ');
-                if (parts.Length > 1)
-                {
-                    FirstName = parts[0];
-                    LastName = string.Join(" ", parts.Skip(1));
-                }
-            }
-        }
-
-        public string Email { get; set; }
-        public string Website { get; set; }
-        public string PasswordHash { get; set; }
-
-        public Customer ToCustomer()
-        {
-            return new Customer
-            {
-                Id = Id,
-                CustomerAddress = CustomerAddress,
-                CustomerNumber = CustomerNumber,
-                FirstName = FirstName,
-                LastName = LastName,
-                Email = Email,
-                Website = Website,
-                PasswordHash = PasswordHash
-            };
-        }
+        public List<Customer> Items { get; set; } = new List<Customer>();
     }
 }
