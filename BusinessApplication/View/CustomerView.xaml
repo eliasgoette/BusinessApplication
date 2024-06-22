@@ -53,7 +53,9 @@
             <Label>Website</Label>
             <TextBox Text="{Binding Website}"></TextBox>
             <Label>PasswordHash</Label>
-            <TextBox Text="{Binding PasswordHash}"></TextBox>
+            <TextBox Text="{Binding PasswordHash, Mode=OneWay}"></TextBox>
+            <Label>New Password</Label>
+            <TextBox Text="{Binding NewPassword}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Column="2">
             <Label>Country</Label>

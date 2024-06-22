@@ -131,7 +131,7 @@ namespace BusinessApplication.ViewModel
             SearchTemporalDate = DateTime.Now;
             SearchTemporalHour = FormatTimeSegment(DateTime.Now.Hour);
             SearchTemporalMinute = FormatTimeSegment(DateTime.Now.Minute);
-            SearchTemporalSecond = FormatTimeSegment(DateTime.Now.Second + 1);
+            SearchTemporalSecond = FormatTimeSegment(DateTime.Now.Second);
         }
 
         private static string FormatTimeSegment(int input)

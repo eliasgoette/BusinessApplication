@@ -152,6 +152,21 @@ public class CustomerViewModel : INotifyPropertyChanged
         }
     }
 
+    public string? NewPassword
+    {
+        get
+        {
+            return null;
+        }
+        set
+        {
+            if (value != null)
+            {
+                PasswordHash = PasswordEncryption.HashPassword(value);
+            }
+        }
+    }
+
     public string? CustomerAddressCountry
     {
         get { return _customerAddressCountry; }
