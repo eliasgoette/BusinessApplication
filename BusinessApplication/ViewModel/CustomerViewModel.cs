@@ -2,6 +2,7 @@
 using BusinessApplication.Repository;
 using BusinessApplication.ViewModel;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 
 public class CustomerViewModel : INotifyPropertyChanged
@@ -284,12 +285,51 @@ public class CustomerViewModel : INotifyPropertyChanged
         ExecuteSearch();
     }
 
+    private bool ValidateCustomerNumber()
+    {
+        if (string.IsNullOrWhiteSpace(_customerNumber))
+            return false;
+
+        var regex = new System.Text.RegularExpressions.Regex(@"^CU\d{5}$");
+        return regex.IsMatch(_customerNumber);
+    }
+
+    private bool ValidateEmail()
+    {
+        if (string.IsNullOrWhiteSpace(_email))
+            return false;
+
+        var regex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        return regex.IsMatch(_email);
+    }
+
+    private bool ValidateWebsite()
+    {
+        if (string.IsNullOrWhiteSpace(_website))
+            return false;
+
+        var regex = new Regex(@"^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+([\/?].*)?$");
+        return regex.IsMatch(_website);
+    }
+
+    private bool ValidatePassword()
+    {
+        if (string.IsNullOrWhiteSpace(_password))
+            return false;
+
+        var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$");
+        return regex.IsMatch(_password);
+    }
+
     private bool ValidateInput()
     {
         return (
-            !string.IsNullOrWhiteSpace(_customerNumber)
+            ValidateCustomerNumber()
             && !string.IsNullOrWhiteSpace(_firstName)
             && !string.IsNullOrWhiteSpace(_lastName)
+            && ValidateEmail()
+            && ValidateWebsite()
+            && ValidatePassword()
             && ValidateAddressInput()
         );
     }

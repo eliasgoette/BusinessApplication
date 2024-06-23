@@ -15,7 +15,7 @@ namespace BusinessApplication
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=BusinessApplicationDb;User Id=sa;Password=Password123;Encrypt=no");
+            optionsBuilder.UseSqlServer("Server=BT,1433; Database=BusinessApplicationDb; Trusted_Connection=True; Encrypt=False");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
