@@ -1,5 +1,7 @@
 ﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
+using BusinessApplication.Utility;
+using BusinessApplication.View;
 using BusinessApplication.ViewModel;
 using System.ComponentModel;
 using System.Windows.Input;
@@ -7,17 +9,19 @@ using System.Windows.Input;
 public class CustomerViewModel : INotifyPropertyChanged
 {
     private readonly IRepository<Customer> _customerRepository;
+    ILogger _logger;
 
     private List<Customer> _searchResults;
     private Customer? _selectedCustomer;
 
     private string? _searchCustomerNumber;
+
     private string? _customerNumber;
     private string? _firstName;
     private string? _lastName;
     private string? _email;
     private string? _website;
-    private string? _password;
+    private string? _passwordHash;
 
     private Address? _customerAddress;
     private string? _customerAddressCountry;
@@ -25,17 +29,23 @@ public class CustomerViewModel : INotifyPropertyChanged
     private string? _customerAddressCity;
     private string? _customerAddressStreetAddress;
 
-    public CustomerViewModel(IRepository<Customer> repository)
+
+    public CustomerViewModel(IRepository<Customer> repository, ILogger logger)
     {
         _customerRepository = repository;
-        _searchResults = _customerRepository.GetAll().ToList();
+        _logger = logger;
+
+        SearchResults = _customerRepository.GetAll().ToList();
 
         Search = new RelayCommand(ExecuteSearch);
         ClearSelection = new RelayCommand(() => SelectedCustomer = null);
+        Export = new RelayCommand(ExecuteExport);
+        Import = new RelayCommand(ExecuteImport);
         Add = new RelayCommand(() => ExecuteAdd());
         Update = new RelayCommand(ExecuteUpdate);
         Remove = new RelayCommand(ExecuteRemove);
     }
+
 
     public List<Customer> SearchResults
     {
@@ -60,7 +70,7 @@ public class CustomerViewModel : INotifyPropertyChanged
             LastName = value?.LastName;
             Email = value?.Email;
             Website = value?.Website;
-            Password = value?.PasswordHash;
+            PasswordHash = value?.PasswordHash;
 
             var address = value?.CustomerAddress;
             CustomerAddressCountry = address?.Country;
@@ -69,6 +79,7 @@ public class CustomerViewModel : INotifyPropertyChanged
             CustomerAddressStreetAddress = address?.StreetAddress;
         }
     }
+
 
     public string? SearchCustomerNumber
     {
@@ -79,6 +90,7 @@ public class CustomerViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(SearchCustomerNumber));
         }
     }
+
 
     public string? CustomerNumber
     {
@@ -130,13 +142,28 @@ public class CustomerViewModel : INotifyPropertyChanged
         }
     }
 
-    public string? Password
+    public string? PasswordHash
     {
-        get { return _password; }
+        get { return _passwordHash; }
         set
         {
-            _password = value;
-            OnPropertyChanged(nameof(Password));
+            _passwordHash = value;
+            OnPropertyChanged(nameof(PasswordHash));
+        }
+    }
+
+    public string? NewPassword
+    {
+        get
+        {
+            return null;
+        }
+        set
+        {
+            if (value != null)
+            {
+                PasswordHash = PasswordEncryption.HashPassword(value);
+            }
         }
     }
 
@@ -183,48 +210,58 @@ public class CustomerViewModel : INotifyPropertyChanged
     private void UpdateCustomerAddress()
     {
         if (
-            _customerAddressCountry != null
-            && _customerAddressZipCode != null
-            && _customerAddressCity != null
-            && _customerAddressStreetAddress != null
+            CustomerAddressCountry != null
+            && CustomerAddressZipCode != null
+            && CustomerAddressCity != null
+            && CustomerAddressStreetAddress != null
         )
         {
             if (_customerAddress != null)
             {
-                _customerAddress.Country = _customerAddressCountry;
-                _customerAddress.ZipCode = _customerAddressZipCode;
-                _customerAddress.City = _customerAddressCity;
-                _customerAddress.StreetAddress = _customerAddressStreetAddress;
+                _customerAddress.Country = CustomerAddressCountry;
+                _customerAddress.ZipCode = CustomerAddressZipCode;
+                _customerAddress.City = CustomerAddressCity;
+                _customerAddress.StreetAddress = CustomerAddressStreetAddress;
             }
             else
             {
                 _customerAddress = new Address
                 {
-                    Country = _customerAddressCountry,
-                    ZipCode = _customerAddressZipCode,
-                    City = _customerAddressCity,
-                    StreetAddress = _customerAddressStreetAddress
+                    Country = CustomerAddressCountry,
+                    ZipCode = CustomerAddressZipCode,
+                    City = CustomerAddressCity,
+                    StreetAddress = CustomerAddressStreetAddress
                 };
             }
         }
     }
 
+
     public ICommand Search { get; }
+    public ICommand ResetFilters { get; }
     public ICommand ClearSelection { get; }
+    public ICommand Export { get; }
+    public ICommand Import { get; }
     public ICommand Add { get; }
     public ICommand Update { get; }
     public ICommand Remove { get; }
 
+
     private void ExecuteSearch()
     {
-        if (SearchCustomerNumber != null)
-        {
-            SearchResults = _customerRepository.GetAllWhere(x => x.CustomerNumber.Contains(SearchCustomerNumber)).ToList();
-        }
-        else
-        {
-            SearchResults = _customerRepository.GetAll().ToList();
-        }
+        SearchResults = _customerRepository.GetAllWhere(x => x.CustomerNumber.Contains(SearchCustomerNumber ?? "")).ToList();
+    }
+
+    private void ExecuteExport()
+    {
+        var exportWindow = new ExportView();
+        exportWindow.Show();
+    }
+
+    private void ExecuteImport()
+    {
+        var importWindow = new ImportView();
+        importWindow.Show();
     }
 
     private async Task ExecuteAdd()
@@ -235,17 +272,17 @@ public class CustomerViewModel : INotifyPropertyChanged
             {
                 CustomerAddress = new Address
                 {
-                    Country = _customerAddressCountry,
-                    ZipCode = _customerAddressZipCode,
-                    City = _customerAddressCity,
-                    StreetAddress = _customerAddressStreetAddress
+                    Country = CustomerAddressCountry,
+                    ZipCode = CustomerAddressZipCode,
+                    City = CustomerAddressCity,
+                    StreetAddress = CustomerAddressStreetAddress
                 },
-                CustomerNumber = _customerNumber,
-                FirstName = _firstName,
-                LastName = _lastName,
-                Email = _email,
-                Website = _website,
-                PasswordHash = _password
+                CustomerNumber = CustomerNumber,
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                Website = Website,
+                PasswordHash = PasswordHash
             };
 
             await _customerRepository.AddAsync(newCustomer);
@@ -257,17 +294,17 @@ public class CustomerViewModel : INotifyPropertyChanged
     {
         if (ValidateInput())
         {
-            SelectedCustomer.CustomerNumber = _customerNumber;
-            SelectedCustomer.FirstName = _firstName;
-            SelectedCustomer.LastName = _lastName;
-            SelectedCustomer.Email = _email;
-            SelectedCustomer.Website = _website;
-            SelectedCustomer.PasswordHash = _password;
+            SelectedCustomer.CustomerNumber = CustomerNumber;
+            SelectedCustomer.FirstName = FirstName;
+            SelectedCustomer.LastName = LastName;
+            SelectedCustomer.Email = Email;
+            SelectedCustomer.Website = Website;
+            SelectedCustomer.PasswordHash = PasswordHash;
 
-            SelectedCustomer.CustomerAddress.Country = _customerAddressCountry;
-            SelectedCustomer.CustomerAddress.ZipCode = _customerAddressZipCode;
-            SelectedCustomer.CustomerAddress.City = _customerAddressCity;
-            SelectedCustomer.CustomerAddress.StreetAddress = _customerAddressStreetAddress;
+            SelectedCustomer.CustomerAddress.Country = CustomerAddressCountry;
+            SelectedCustomer.CustomerAddress.ZipCode = CustomerAddressZipCode;
+            SelectedCustomer.CustomerAddress.City = CustomerAddressCity;
+            SelectedCustomer.CustomerAddress.StreetAddress = CustomerAddressStreetAddress;
 
             _customerRepository.Update(SelectedCustomer);
             ExecuteSearch();
@@ -276,9 +313,13 @@ public class CustomerViewModel : INotifyPropertyChanged
 
     private void ExecuteRemove()
     {
-        if (_selectedCustomer != null)
+        if (SelectedCustomer != null)
         {
-            _customerRepository.Remove(_selectedCustomer);
+            _customerRepository.Remove(SelectedCustomer);
+        }
+        else
+        {
+            _logger.LogMessage("No item selected.");
         }
 
         ExecuteSearch();
@@ -286,21 +327,38 @@ public class CustomerViewModel : INotifyPropertyChanged
 
     private bool ValidateInput()
     {
-        return (
-            !string.IsNullOrWhiteSpace(_customerNumber)
-            && !string.IsNullOrWhiteSpace(_firstName)
-            && !string.IsNullOrWhiteSpace(_lastName)
-            && ValidateAddressInput()
-        );
+        if (string.IsNullOrWhiteSpace(CustomerNumber))
+        {
+            _logger.LogMessage("Customer number must be defined.");
+            return false;
+        }
+        if (string.IsNullOrWhiteSpace(FirstName))
+        {
+            _logger.LogMessage("First name must be defined.");
+            return false;
+        }
+        if (string.IsNullOrWhiteSpace(LastName))
+        {
+            _logger.LogMessage("Last name must be defined.");
+            return false;
+        }
+        if (!ValidateAddressInput())
+        {
+            _logger.LogMessage("Address must be completely defined.");
+            return false;
+        }
+
+        return true;
     }
 
     private bool ValidateAddressInput()
     {
-        return !string.IsNullOrWhiteSpace(_customerAddressCountry) &&
-               !string.IsNullOrWhiteSpace(_customerAddressZipCode) &&
-               !string.IsNullOrWhiteSpace(_customerAddressCity) &&
-               !string.IsNullOrWhiteSpace(_customerAddressStreetAddress);
+        return !string.IsNullOrWhiteSpace(CustomerAddressCountry) &&
+               !string.IsNullOrWhiteSpace(CustomerAddressZipCode) &&
+               !string.IsNullOrWhiteSpace(CustomerAddressCity) &&
+               !string.IsNullOrWhiteSpace(CustomerAddressStreetAddress);
     }
+
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

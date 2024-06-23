@@ -13,7 +13,7 @@ namespace BusinessApplication.View
         public ArticleView()
         {
             InitializeComponent();
-            var articleRepository = new Repository<Article>(() => new AppDbContext());
+            var articleRepository = new Repository<Article>(() => new AppDbContext(), App.AppLogger);
             DataContext = new ArticleViewModel(articleRepository);
         }
     }
