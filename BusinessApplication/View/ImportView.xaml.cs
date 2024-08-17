@@ -15,7 +15,7 @@ namespace BusinessApplication.View
         public ImportView()
         {
             InitializeComponent();
-            DataContext = new ImportViewModel(App.Container.Resolve<IRepository<Customer>>(), App.Container.Resolve<ILogger>());
+            DataContext = new ImportViewModel(App.Container.Resolve<IRepository<Customer>>(), App.Container.Resolve<ILogger>(), new RelayCommand(this.Close));
         }
     }
 }
