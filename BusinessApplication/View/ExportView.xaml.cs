@@ -15,7 +15,7 @@ namespace BusinessApplication.View
         public ExportView()
         {
             InitializeComponent();
-            DataContext = new ExportViewModel(App.Container.Resolve<IRepository<Customer>>(), App.Container.Resolve<ILogger>());
+            DataContext = new ExportViewModel(App.Container.Resolve<IRepository<Customer>>(), App.Container.Resolve<ILogger>(), new RelayCommand(this.Close));
         }
     }
 }
