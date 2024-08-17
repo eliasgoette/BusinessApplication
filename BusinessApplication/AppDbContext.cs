@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessApplication
 {
+    public delegate DbContext DbContextFactoryMethod();
+
     public class AppDbContext : DbContext
     {
         public DbSet<Address> Addresses { get; set; }

@@ -1,5 +1,7 @@
-﻿using BusinessApplication.Model;
+﻿using Autofac;
+using BusinessApplication.Model;
 using BusinessApplication.Repository;
+using BusinessApplication.Utility;
 using BusinessApplication.ViewModel;
 using System.Windows;
 
@@ -13,8 +15,7 @@ namespace BusinessApplication.View
         public ExportView()
         {
             InitializeComponent();
-            var customerRepository = new Repository<Customer>(() => new AppDbContext(), App.AppLogger);
-            DataContext = new ExportViewModel(customerRepository, App.AppLogger);
+            DataContext = new ExportViewModel(App.Container.Resolve<IRepository<Customer>>(), App.Container.Resolve<ILogger>());
         }
     }
 }

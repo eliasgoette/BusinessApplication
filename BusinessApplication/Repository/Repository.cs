@@ -10,8 +10,6 @@ namespace BusinessApplication.Repository
         private readonly DbContextFactoryMethod _getDbContext;
         private readonly ILogger _logger;
 
-        public delegate DbContext DbContextFactoryMethod();
-
         public Repository(DbContextFactoryMethod getDbContext, ILogger logger)
         {
             _getDbContext = getDbContext;

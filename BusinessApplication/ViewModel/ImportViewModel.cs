@@ -16,10 +16,10 @@ namespace BusinessApplication.ViewModel
         private List<Customer> _data = [];
         private bool _confirmIsEnabled = false;
 
-        public ImportViewModel(ILogger logger, IRepository<Customer> repository)
+        public ImportViewModel(IRepository<Customer> repository, ILogger logger)
         {
-            _logger = logger;
             _repository = repository;
+            _logger = logger;
             Browse = new RelayCommand(ExecuteBrowse);
             Confirm = new RelayCommand(ExecuteConfirm);
         }

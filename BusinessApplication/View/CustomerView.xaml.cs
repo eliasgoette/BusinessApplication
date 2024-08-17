@@ -1,4 +1,5 @@
-﻿using BusinessApplication.Model;
+﻿using Autofac;
+using BusinessApplication.Model;
 using BusinessApplication.Repository;
 using BusinessApplication.Utility;
 using System.Windows.Controls;
@@ -13,10 +14,7 @@ namespace BusinessApplication.View
         public CustomerView()
         {
             InitializeComponent();
-            var logger = new Logger();
-            logger.AddLoggingService(new PopupLoggingService());
-            var customerRepository = new Repository<Customer>(() => new AppDbContext(), App.AppLogger);
-            DataContext = new CustomerViewModel(customerRepository, App.AppLogger);
+            DataContext = new CustomerViewModel(App.Container.Resolve<IRepository<Customer>>(), App.Container.Resolve<ILogger>());
         }
     }
 }
