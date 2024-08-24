@@ -27,10 +27,14 @@ namespace BusinessApplication
                    .As<ILoggingService>()
                    .OnActivated(e => (e.Instance as ILogger)?.AddLoggingService(e.Context.Resolve<PopupLoggingService>()));
 
-            builder.Register<DbContextFactoryMethod>((c) => AppDbContextFactory.Create());
+            builder.Register((c) => AppDbContextFactory.Create());
 
             builder.RegisterType<Repository<Customer>>()
                    .As<IRepository<Customer>>()
+                   .InstancePerDependency();
+
+            builder.RegisterType<Repository<Address>>()
+                   .As<IRepository<Address>>()
                    .InstancePerDependency();
 
             builder.RegisterType<Repository<Article>>()

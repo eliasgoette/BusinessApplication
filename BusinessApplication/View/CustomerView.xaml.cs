@@ -14,7 +14,7 @@ namespace BusinessApplication.View
         public CustomerView()
         {
             InitializeComponent();
-            DataContext = new CustomerViewModel(App.Container.Resolve<IRepository<Customer>>(), App.Container.Resolve<ILogger>());
+            DataContext = new CustomerViewModel(App.Container.Resolve<IRepository<Customer>>(), App.Container.Resolve<IRepository<Address>>(), App.Container.Resolve<ILogger>());
         }
     }
 }
