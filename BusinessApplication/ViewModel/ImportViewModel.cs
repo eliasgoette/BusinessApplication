@@ -15,13 +15,15 @@ namespace BusinessApplication.ViewModel
         private string _filePath = "";
         private List<Customer> _data = [];
         private bool _confirmIsEnabled = false;
+        private ICommand _closeWindow;
 
-        public ImportViewModel(ILogger logger, IRepository<Customer> repository)
+        public ImportViewModel(IRepository<Customer> repository, ILogger logger, ICommand closeWindow)
         {
-            _logger = logger;
             _repository = repository;
+            _logger = logger;
             Browse = new RelayCommand(ExecuteBrowse);
             Confirm = new RelayCommand(ExecuteConfirm);
+            _closeWindow = closeWindow;
         }
 
         public string FilePath
@@ -132,7 +134,7 @@ namespace BusinessApplication.ViewModel
 
             ConfirmIsEnabled = true;
 
-            // TODO: Close window
+            _closeWindow.Execute(this);
         }
 
         public ICommand Browse { get; }

@@ -1,4 +1,5 @@
-﻿using BusinessApplication.Model;
+﻿using Autofac;
+using BusinessApplication.Model;
 using BusinessApplication.Repository;
 using BusinessApplication.ViewModel;
 using System.Windows.Controls;
@@ -13,8 +14,7 @@ namespace BusinessApplication.View
         public ArticleView()
         {
             InitializeComponent();
-            var articleRepository = new Repository<Article>(() => new AppDbContext(), App.AppLogger);
-            DataContext = new ArticleViewModel(articleRepository);
+            DataContext = new ArticleViewModel(App.Container.Resolve<IRepository<Article>>());
         }
     }
 }

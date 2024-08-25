@@ -1,20 +1,51 @@
-﻿using System.Windows;
+﻿using Autofac;
+using BusinessApplication.Model;
+using BusinessApplication.Repository;
 using BusinessApplication.Utility;
+using System.Windows;
 
 namespace BusinessApplication
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        private static ILogger _appLogger = new Logger();
+        private static IContainer _container;
 
         public App()
         {
-            _appLogger.AddLoggingService(new PopupLoggingService());
+            ConfigureContainer();
         }
 
-        public static ILogger AppLogger { get { return _appLogger; } }
+        private void ConfigureContainer()
+        {
+            var builder = new ContainerBuilder();
+
+            builder.RegisterType<Logger>()
+                   .As<ILogger>()
+                   .SingleInstance();
+
+            builder.RegisterType<PopupLoggingService>()
+                   .As<ILoggingService>()
+                   .OnActivated(e => (e.Instance as ILogger)?.AddLoggingService(e.Context.Resolve<PopupLoggingService>()));
+
+            builder.Register((c) => AppDbContextFactory.Create());
+
+            builder.RegisterType<Repository<Customer>>()
+                   .As<IRepository<Customer>>()
+                   .InstancePerDependency();
+
+            builder.RegisterType<Repository<Address>>()
+                   .As<IRepository<Address>>()
+                   .InstancePerDependency();
+
+            builder.RegisterType<Repository<Article>>()
+                   .As<IRepository<Article>>()
+                   .InstancePerDependency();
+
+            _container = builder.Build();
+
+            var c = _container.Resolve<IRepository<Customer>>();
+        }
+
+        public static IContainer Container => _container;
     }
 }

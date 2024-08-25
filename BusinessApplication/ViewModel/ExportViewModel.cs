@@ -27,7 +27,9 @@ namespace BusinessApplication.ViewModel
         private string _searchTemporalMinute;
         private string _searchTemporalSecond;
 
-        public ExportViewModel(IRepository<Customer> repository, ILogger logger)
+        private ICommand _closeWindow;
+
+        public ExportViewModel(IRepository<Customer> repository, ILogger logger, ICommand closeWindow)
         {
             _repository = repository;
             _logger = logger;
@@ -37,6 +39,7 @@ namespace BusinessApplication.ViewModel
 
             ResetFilters = new RelayCommand(ExecuteResetFilters);
             Save = new RelayCommand(ExecuteSave);
+            _closeWindow = closeWindow;
         }
 
         public List<Customer>? Data
@@ -208,7 +211,7 @@ namespace BusinessApplication.ViewModel
                     string filename = dialog.FileName;
                     File.WriteAllText(filename, Result);
 
-                    // TODO: Close window
+                    _closeWindow.Execute(this);
                 }
             }
             catch (Exception ex)

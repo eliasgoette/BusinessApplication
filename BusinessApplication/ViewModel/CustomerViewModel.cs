@@ -9,6 +9,7 @@ using System.Windows.Input;
 public class CustomerViewModel : INotifyPropertyChanged
 {
     private readonly IRepository<Customer> _customerRepository;
+    private readonly IRepository<Address> _addressRepository;
     ILogger _logger;
 
     private List<Customer> _searchResults;
@@ -30,9 +31,10 @@ public class CustomerViewModel : INotifyPropertyChanged
     private string? _customerAddressStreetAddress;
 
 
-    public CustomerViewModel(IRepository<Customer> repository, ILogger logger)
+    public CustomerViewModel(IRepository<Customer> customerRepository, IRepository<Address> addressRepository, ILogger logger)
     {
-        _customerRepository = repository;
+        _customerRepository = customerRepository;
+        _addressRepository = addressRepository;
         _logger = logger;
 
         SearchResults = _customerRepository.GetAll().ToList();
@@ -316,6 +318,7 @@ public class CustomerViewModel : INotifyPropertyChanged
         if (SelectedCustomer != null)
         {
             _customerRepository.Remove(SelectedCustomer);
+            _addressRepository.Remove(SelectedCustomer.CustomerAddress);
         }
         else
         {
