@@ -8,13 +8,31 @@ namespace BusinessApplication.Tests
     [TestClass]
     public class RepositoryUnitTest
     {
-        Repository<Customer> customerRepository;
-        Repository<Address> addressRepository;
+        private IRepository<Customer> customerRepository;
+        private IRepository<Address> addressRepository;
+        private AppDbContext dbContext;
 
         [TestInitialize]
         public void Setup()
         {
-            var addresses = new List<Address> {
+            //var options = new DbContextOptionsBuilder<AppDbContext>()
+            //    .UseInMemoryDatabase(databaseName: "BA Project Test DB")
+            //    .Options;
+
+            //dbContext = new AppDbContext(options);
+
+            SeedTestData();
+
+            var logger = new Logger();
+
+            customerRepository = new Repository<Customer>(() => dbContext, logger);
+            addressRepository = new Repository<Address>(() => dbContext, logger);
+        }
+
+        private void SeedTestData()
+        {
+            var addresses = new List<Address>
+            {
                 new Address {
                     Country = "United States",
                     ZipCode = "IN 47374",
@@ -35,13 +53,13 @@ namespace BusinessApplication.Tests
                 }
             };
 
-            var logger = new Logger();
-            customerRepository = new Repository<Customer>(() => new AppDbContextStub(), logger);
-            addressRepository = new Repository<Address>(() => new AppDbContextStub(), logger);
+            dbContext.AddRange(addresses);
+            dbContext.AddRange(customers);
+            dbContext.SaveChanges();
         }
 
         [TestMethod]
-        public async Task TestAddCustomerAndOrder()
+        public async Task TestAddCustomer()
         {
             var address = new Address
             {
@@ -59,9 +77,12 @@ namespace BusinessApplication.Tests
                 LastName = "Doe"
             };
 
-            Assert.IsTrue(await customerRepository.AddAsync(customer));
+            var result = await customerRepository.AddAsync(customer);
+            Assert.IsTrue(result);
 
-            var customerFound = customerRepository.GetAllWhere(x => x == customer).FirstOrDefault();
+            var allC = customerRepository.GetAll();
+            var customerFound = customerRepository.GetAllWhere(x => x.CustomerNumber == customer.CustomerNumber).FirstOrDefault();
+            Assert.IsNotNull(customerFound);
             Assert.AreEqual(customer.CustomerNumber, customerFound?.CustomerNumber);
         }
 
@@ -81,6 +102,7 @@ namespace BusinessApplication.Tests
             customerRepository.Update(customer);
 
             var customerFound = customerRepository.GetAllWhere(x => x.Id == customer.Id).FirstOrDefault();
+            Assert.IsNotNull(customerFound);
             Assert.AreEqual(testName, customerFound?.FirstName);
             Assert.AreEqual(testName, customerFound?.LastName);
         }
@@ -92,15 +114,11 @@ namespace BusinessApplication.Tests
 
             Assert.IsNotNull(customer);
 
-            Assert.IsTrue(customerRepository.Remove(customer));
+            var result = customerRepository.Remove(customer);
+            Assert.IsTrue(result);
 
-            Assert.IsNull(customerRepository.GetAllWhere(x => x.Id == customer.Id).FirstOrDefault());
+            var customerFound = customerRepository.GetAllWhere(x => x.Id == customer.Id).FirstOrDefault();
+            Assert.IsNull(customerFound);
         }
-    }
-
-    public class AppDbContextStub : DbContext
-    {
-        public DbSet<Customer> Customers { get; set; }
-        public DbSet<Address> Addresses { get; set; }
     }
 }
