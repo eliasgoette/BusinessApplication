@@ -8,54 +8,113 @@ namespace BusinessApplication.Tests
     [TestClass]
     public class RepositoryUnitTest
     {
-        private IRepository<Customer> customerRepository;
-        private IRepository<Address> addressRepository;
-        private AppDbContext dbContext;
+        private List<Address> _addresses;
+        private List<Customer> _customers;
+        private DbContextFactoryMethod _dbContextFactory;
+        private IRepository<Customer> _customerRepository;
+        private IRepository<Address> _addressRepository;
 
         [TestInitialize]
         public void Setup()
         {
-            //var options = new DbContextOptionsBuilder<AppDbContext>()
-            //    .UseInMemoryDatabase(databaseName: "BA Project Test DB")
-            //    .Options;
-
-            //dbContext = new AppDbContext(options);
+            _dbContextFactory = () =>
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+                optionsBuilder.UseInMemoryDatabase("Repository Test DB");
+                return new AppDbContext(optionsBuilder.Options);
+            };
 
             SeedTestData();
 
             var logger = new Logger();
 
-            customerRepository = new Repository<Customer>(() => dbContext, logger);
-            addressRepository = new Repository<Address>(() => dbContext, logger);
+            _customerRepository = new Repository<Customer>(_dbContextFactory, logger);
+            _addressRepository = new Repository<Address>(_dbContextFactory, logger);
         }
 
         private void SeedTestData()
         {
-            var addresses = new List<Address>
+            using (var dbContext = _dbContextFactory.Invoke())
             {
-                new Address {
-                    Country = "United States",
-                    ZipCode = "IN 47374",
-                    City = "Richmond",
-                    StreetAddress = "2739 Sugarfoot Lane"
-                }
-            };
-
-            var customers = new List<Customer>
-            {
-                new Customer
+                _addresses = new List<Address>
                 {
-                    CustomerNumber = "CU-TEST-00001",
-                    FirstName = "Jim",
-                    LastName = "Ricketts",
-                    Email = "JimBRicketts@yahoo.com",
-                    CustomerAddress = addresses[0]
-                }
-            };
+                    new Address {
+                        Country = "United States",
+                        ZipCode = "IN 47374",
+                        City = "Richmond",
+                        StreetAddress = "2739 Sugarfoot Lane"
+                    },
+                    new Address {
+                        Country = "United States",
+                        ZipCode = "CA 94103",
+                        City = "San Francisco",
+                        StreetAddress = "1234 Market Street"
+                    },
+                    new Address {
+                        Country = "United States",
+                        ZipCode = "NY 10001",
+                        City = "New York",
+                        StreetAddress = "5678 8th Avenue"
+                    },
+                    new Address {
+                        Country = "Switzerland",
+                        ZipCode = "8001",
+                        City = "Zurich",
+                        StreetAddress = "Bahnhofstrasse 10"
+                    }
+                };
 
-            dbContext.AddRange(addresses);
-            dbContext.AddRange(customers);
-            dbContext.SaveChanges();
+                _customers = new List<Customer>
+                {
+                    new Customer
+                    {
+                        CustomerNumber = "CU-TEST-00001",
+                        FirstName = "Jim",
+                        LastName = "Ricketts",
+                        Email = "JimBRicketts@yahoo.com",
+                        CustomerAddress = _addresses[0]
+                    },
+                    new Customer
+                    {
+                        CustomerNumber = "CU-TEST-00002",
+                        FirstName = "Jane",
+                        LastName = "Doe",
+                        Email = "JaneDoe@gmail.com",
+                        CustomerAddress = _addresses[1]
+                    },
+                    new Customer
+                    {
+                        CustomerNumber = "CU-TEST-00003",
+                        FirstName = "John",
+                        LastName = "Smith",
+                        Email = "JohnSmith@outlook.com",
+                        CustomerAddress = _addresses[2]
+                    },
+                    new Customer
+                    {
+                        CustomerNumber = "CU-TEST-00004",
+                        FirstName = "Emily",
+                        LastName = "Brown",
+                        Email = "EmilyBrown@gmail.com",
+                        CustomerAddress = _addresses[3]
+                    }
+                };
+
+                dbContext.AddRange(_addresses);
+                dbContext.AddRange(_customers);
+                dbContext.SaveChanges();
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAll()
+        {
+            var customers = _customerRepository.GetAll().ToList();
+
+            for (int i = 0; i < _customers.Count; i++)
+            {
+                Assert.AreEqual(_customers[i]?.Id, customers[i].Id);
+            }
         }
 
         [TestMethod]
@@ -72,53 +131,61 @@ namespace BusinessApplication.Tests
             var customer = new Customer
             {
                 CustomerAddress = address,
-                CustomerNumber = "CU-TEST-10000",
+                CustomerNumber = "CU-TEST-ADD-" + Guid.NewGuid(),
                 FirstName = "John",
                 LastName = "Doe"
             };
 
-            var result = await customerRepository.AddAsync(customer);
+            var result = await _customerRepository.AddAsync(customer);
             Assert.IsTrue(result);
 
-            var allC = customerRepository.GetAll();
-            var customerFound = customerRepository.GetAllWhere(x => x.CustomerNumber == customer.CustomerNumber).FirstOrDefault();
-            Assert.IsNotNull(customerFound);
-            Assert.AreEqual(customer.CustomerNumber, customerFound?.CustomerNumber);
+            using (var context = _dbContextFactory.Invoke())
+            {
+                var customerFound = context.Set<Customer>().Where(x => x.CustomerNumber == customer.CustomerNumber).FirstOrDefault();
+                Assert.AreEqual(customer.CustomerNumber, customerFound?.CustomerNumber);
+            }
         }
 
         [TestMethod]
         public void TestUpdateCustomer()
         {
-            var customer = customerRepository.GetAll().FirstOrDefault();
-            var testName = "Test";
-
-            if (customer == null)
+            using (var context = _dbContextFactory.Invoke())
             {
-                Assert.Fail("No customer found to update.");
+                var customer = context.Set<Customer>().FirstOrDefault();
+
+                if (customer == null)
+                {
+                    Assert.Fail("No customer found to update.");
+                }
+
+                var testName = "Test" + Guid.NewGuid();
+                customer.FirstName = testName;
+                customer.LastName = testName;
+
+                _customerRepository.Update(customer);
+
+                var customerFound = context.Set<Customer>().Where(x => x.Id == customer.Id).FirstOrDefault();
+
+                Assert.IsNotNull(customerFound);
+                Assert.AreEqual(testName, customerFound?.FirstName);
+                Assert.AreEqual(testName, customerFound?.LastName);
             }
-
-            customer.FirstName = testName;
-            customer.LastName = testName;
-            customerRepository.Update(customer);
-
-            var customerFound = customerRepository.GetAllWhere(x => x.Id == customer.Id).FirstOrDefault();
-            Assert.IsNotNull(customerFound);
-            Assert.AreEqual(testName, customerFound?.FirstName);
-            Assert.AreEqual(testName, customerFound?.LastName);
         }
 
         [TestMethod]
         public void TestRemoveCustomer()
         {
-            var customer = customerRepository.GetAll().FirstOrDefault();
+            using (var context = _dbContextFactory.Invoke())
+            {
+                var customer = context.Set<Customer>().FirstOrDefault();
+                Assert.IsNotNull(customer);
 
-            Assert.IsNotNull(customer);
+                var result = _customerRepository.Remove(customer);
+                Assert.IsTrue(result);
 
-            var result = customerRepository.Remove(customer);
-            Assert.IsTrue(result);
-
-            var customerFound = customerRepository.GetAllWhere(x => x.Id == customer.Id).FirstOrDefault();
-            Assert.IsNull(customerFound);
+                var customerFound = context.Set<Customer>().Where(x => x.Id == customer.Id).FirstOrDefault();
+                Assert.IsNull(customerFound);
+            }
         }
     }
 }

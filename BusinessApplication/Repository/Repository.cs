@@ -85,7 +85,42 @@ namespace BusinessApplication.Repository
 
         public IEnumerable<T> GetAllWhere(Expression<Func<T, bool>> predicate)
         {
-            return GetAllWhereAsOf(predicate, DateTime.UtcNow);
+            try
+            {
+                using (var context = _getDbContext())
+                {
+                    var canConnect = context.Database.CanConnect();
+                    if (canConnect)
+                    {
+                        var navigationProperties = typeof(T)
+                            .GetProperties()
+                            .Where(prop => prop.PropertyType.IsClass && prop.PropertyType != typeof(string))
+                            .Select(prop => prop.Name)
+                            .ToArray();
+
+                        var query = context.Set<T>().Where(predicate);
+
+                        foreach (var property in navigationProperties)
+                        {
+                            query = query.Include(property);
+                        }
+
+                        List<T> l = [.. query];
+
+                        return l;
+                    }
+                    else
+                    {
+                        LogConnectionError();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+
+            return [];
         }
 
         public IEnumerable<T> GetAll()
