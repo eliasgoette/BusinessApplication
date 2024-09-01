@@ -4,9 +4,10 @@ using BusinessApplication.Utility;
 using BusinessApplication.View;
 using BusinessApplication.ViewModel;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 
-public class CustomerViewModel : INotifyPropertyChanged
+public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
 {
     private readonly IRepository<Customer> _customerRepository;
     private readonly IRepository<Address> _addressRepository;
@@ -328,6 +329,42 @@ public class CustomerViewModel : INotifyPropertyChanged
         ExecuteSearch();
     }
 
+    private bool ValidateCustomerNumber()
+    {
+        if (string.IsNullOrWhiteSpace(_customerNumber))
+            return false;
+
+        var regex = new System.Text.RegularExpressions.Regex(@"^CU\d{5}$");
+        return regex.IsMatch(_customerNumber);
+    }
+
+    private bool ValidateEmail()
+    {
+        if (string.IsNullOrWhiteSpace(_email))
+            return false;
+
+        var regex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        return regex.IsMatch(_email);
+    }
+
+    private bool ValidateWebsite()
+    {
+        if (string.IsNullOrWhiteSpace(_website))
+            return false;
+
+        var regex = new Regex(@"^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+([\/?].*)?$");
+        return regex.IsMatch(_website);
+    }
+
+    private bool ValidatePassword()
+    {
+        if (string.IsNullOrWhiteSpace(PasswordHash))
+            return false;
+
+        var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$");
+        return regex.IsMatch(PasswordHash);
+    }
+
     private bool ValidateInput()
     {
         if (string.IsNullOrWhiteSpace(CustomerNumber))
@@ -351,7 +388,15 @@ public class CustomerViewModel : INotifyPropertyChanged
             return false;
         }
 
-        return true;
+        return (
+            ValidateCustomerNumber()
+            && !string.IsNullOrWhiteSpace(_firstName)
+            && !string.IsNullOrWhiteSpace(_lastName)
+            && ValidateEmail()
+            && ValidateWebsite()
+            && ValidatePassword()
+            && ValidateAddressInput()
+        );
     }
 
     private bool ValidateAddressInput()
@@ -362,6 +407,48 @@ public class CustomerViewModel : INotifyPropertyChanged
                !string.IsNullOrWhiteSpace(CustomerAddressStreetAddress);
     }
 
+    public string this[string columnName]
+    {
+        get
+        {
+            string error = string.Empty;
+
+            switch (columnName)
+            {
+                case nameof(CustomerNumber):
+                    if (!ValidateCustomerNumber())
+                        error = "Kundennummer ist ungültig. Format: CU#####";
+                    break;
+
+                case nameof(Email):
+                    if (!ValidateEmail())
+                        error = "Email is invalid.";
+                    break;
+
+                case nameof(Website):
+                    if (!ValidateWebsite())
+                        error = "Website is invalid.";
+                    break;
+
+                case nameof(NewPassword):
+                    if (!ValidatePassword())
+                        error = "Password must be at least 8 characters, with a mix of upper/lower case letters and digits.";
+                    break;
+
+                case nameof(CustomerAddressCountry):
+                case nameof(CustomerAddressZipCode):
+                case nameof(CustomerAddressCity):
+                case nameof(CustomerAddressStreetAddress):
+                    if (!ValidateAddressInput())
+                        error = "Address fields must not be empty.";
+                    break;
+            }
+
+            return error;
+        }
+    }
+
+    public string Error => null;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

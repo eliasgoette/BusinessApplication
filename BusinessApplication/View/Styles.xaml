@@ -18,6 +18,14 @@
     <Style TargetType="TextBox">
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Padding" Value="2.5"/>
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="true">
+                <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self},
+                                            Path=(Validation.Errors)[0].ErrorContent}" />
+                <Setter Property="BorderBrush" Value="Red" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
     <Style TargetType="TextBlock" x:Key="Title">
         <Setter Property="Margin" Value="0 5"/>
