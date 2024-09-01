@@ -24,6 +24,8 @@ namespace BusinessApplication
             if(!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer("Server=localhost,1433;Database=BusinessApplicationDb;User Id=sa;Password=Password123;Encrypt=no");
+                // Verbindung über Microsoft Benutzer:
+                // optionsBuilder.UseSqlServer("Server=BT,1433; Database=BusinessApplicationDb; Trusted_Connection=True; Encrypt=False");
             }
         }
 
