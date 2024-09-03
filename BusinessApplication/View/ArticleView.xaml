@@ -7,11 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 
-	<UserControl.DataContext>
-		<local:ArticleViewModel />
-	</UserControl.DataContext>
-
-	<UserControl.Resources>
+    <UserControl.Resources>
 		<ResourceDictionary Source="./Styles.xaml"></ResourceDictionary>
 	</UserControl.Resources>
 
@@ -26,40 +22,40 @@
 		</Grid.RowDefinitions>
 
 		<StackPanel>
-			<TextBlock Style="{StaticResource Title}">Artikel</TextBlock>
+			<TextBlock Style="{StaticResource Title}">Articles</TextBlock>
 			<StackPanel>
-				<Label>Artikelnummer</Label>
+				<Label>Article Number</Label>
 				<TextBox Text="{Binding SearchArticleNumber}" />
-				<Button Command="{Binding Search}">Suchen</Button>
+				<Button Command="{Binding Search}">Search</Button>
 			</StackPanel>
 			<DataGrid AutoGenerateColumns="False" ItemsSource="{Binding SearchResults}">
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Artikelnummer" Binding="{Binding ArticleNumber}" />
+					<DataGridTextColumn Header="Article Number" Binding="{Binding ArticleNumber}" />
 					<DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-					<DataGridTextColumn Header="Preis" Binding="{Binding Price}" />
+					<DataGridTextColumn Header="Price" Binding="{Binding Price}" />
 				</DataGrid.Columns>
 			</DataGrid>
 		</StackPanel>
 
 		<StackPanel Grid.Row="1">
-			<Button Command="{Binding ClearSelection}">Auswahl löschen</Button>
+            <Button Command="{Binding ClearSelection}">Clear Selection</Button>
 		</StackPanel>
 
 		<StackPanel Grid.Column="1">
-			<Label>Artikelnummer</Label>
+			<Label>Article Number</Label>
 			<TextBox Text="{Binding ArticleNumber}" />
 			<Label>Name</Label>
 			<TextBox Text="{Binding ArticleName}" />
-			<Label>Preis</Label>
+			<Label>Price</Label>
 			<TextBox Text="{Binding ArticlePrice}" />
 		</StackPanel>
 
 		<StackPanel Grid.Column="1" Grid.Row="1">
 			<Border>
-				<Button Command="{Binding Add}">Hinzufügen</Button>
+                <Button Command="{Binding Add}">Add</Button>
 			</Border>
-			<Button Command="{Binding Update}">Aktualisieren</Button>
-			<Button Command="{Binding Remove}">Entfernen</Button>
+            <Button Command="{Binding Update}">Update</Button>
+            <Button Command="{Binding Remove}">Remove</Button>
 		</StackPanel>
 	</Grid>
 </UserControl>

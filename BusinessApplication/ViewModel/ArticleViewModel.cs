@@ -1,5 +1,6 @@
 ﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
+using BusinessApplication.Utility;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -122,7 +123,7 @@ namespace BusinessApplication.ViewModel
                 {
                     ArticleNumber = ArticleNumber,
                     Name = ArticleName,
-                    Price = decimal.TryParse(ArticlePrice, out var price) ? price : 0
+                    Price = double.TryParse(ArticlePrice, out var price) ? price : 0
                 };
 
                 await _articleRepository.AddAsync(newArticle);
@@ -138,14 +139,14 @@ namespace BusinessApplication.ViewModel
                 {
                     SelectedArticle.ArticleNumber = ArticleNumber;
                     SelectedArticle.Name = ArticleName;
-                    SelectedArticle.Price = decimal.TryParse(ArticlePrice, out var price) ? price : 0;
+                    SelectedArticle.Price = double.TryParse(ArticlePrice, out var price) ? price : 0;
 
                     _articleRepository.Update(SelectedArticle);
                     ExecuteSearch();
                 }
                 else
                 {
-                    _logger.LogMessage("Kein Artikel ausgewählt.");
+                    _logger.LogMessage("No article selected.");
                 }
             }
         }
@@ -159,7 +160,7 @@ namespace BusinessApplication.ViewModel
             }
             else
             {
-                _logger.LogMessage("Kein Artikel ausgewählt.");
+                _logger.LogMessage("No article selected.");
             }
         }
 
@@ -167,17 +168,17 @@ namespace BusinessApplication.ViewModel
         {
             if (string.IsNullOrWhiteSpace(ArticleNumber))
             {
-                _logger.LogMessage("Artikelnummer muss definiert sein.");
+                _logger.LogMessage("Article number can't be undefined.");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(ArticleName))
             {
-                _logger.LogMessage("Artikelname muss definiert sein.");
+                _logger.LogMessage("Article name can't be undefined.");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(ArticlePrice) || !decimal.TryParse(ArticlePrice, out _))
             {
-                _logger.LogMessage("Artikelpreis muss eine gültige Zahl sein.");
+                _logger.LogMessage("Article price must be a valid number.");
                 return false;
             }
 

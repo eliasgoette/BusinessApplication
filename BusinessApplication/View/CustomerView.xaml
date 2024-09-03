@@ -28,6 +28,7 @@
             <StackPanel>
                 <Label>Customer Number</Label>
                 <TextBox Text="{Binding SearchCustomerNumber}"></TextBox>
+                <Button Command="{Binding Search}">Search</Button>
             </StackPanel>
             <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedCustomer}">
                 <DataGrid.Columns>
@@ -38,7 +39,6 @@
             </DataGrid>
         </StackPanel>
         <StackPanel Grid.Row="1">
-            <Button Command="{Binding Search}">Search</Button>
             <Button Command="{Binding ClearSelection}">Clear Selection</Button>
         </StackPanel>
         <StackPanel Grid.Column="1">
