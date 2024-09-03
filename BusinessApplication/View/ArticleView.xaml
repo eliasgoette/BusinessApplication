@@ -28,7 +28,7 @@
 				<TextBox Text="{Binding SearchArticleNumber}" />
 				<Button Command="{Binding Search}">Search</Button>
 			</StackPanel>
-			<DataGrid AutoGenerateColumns="False" ItemsSource="{Binding SearchResults}">
+			<DataGrid AutoGenerateColumns="False" ItemsSource="{Binding SearchResults}" SelectedItem="{Binding SelectedArticle}">
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="Article Number" Binding="{Binding ArticleNumber}" />
 					<DataGridTextColumn Header="Name" Binding="{Binding Name}" />

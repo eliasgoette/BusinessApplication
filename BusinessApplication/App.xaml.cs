@@ -42,8 +42,6 @@ namespace BusinessApplication
                    .InstancePerDependency();
 
             _container = builder.Build();
-
-            var c = _container.Resolve<IRepository<Customer>>();
         }
 
         public static IContainer Container => _container;
