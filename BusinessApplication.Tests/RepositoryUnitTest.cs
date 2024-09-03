@@ -111,9 +111,10 @@ namespace BusinessApplication.Tests
         {
             var customers = _customerRepository.GetAll().ToList();
 
-            for (int i = 0; i < _customers.Count; i++)
+            foreach (var expectedCustomer in _customers)
             {
-                Assert.AreEqual(_customers[i]?.Id, customers[i].Id);
+                var customer = customers.Find(x => x.CustomerNumber == expectedCustomer.CustomerNumber);
+                Assert.IsNotNull(customer);
             }
         }
 

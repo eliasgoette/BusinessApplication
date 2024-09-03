@@ -3,7 +3,7 @@
 namespace BusinessApplication.Tests
 {
     [TestClass]
-    public class CustomerSerializerUnitTests
+    public class CustomerSerializerUnitTest
     {
         private Customer GetCustomer()
         {
