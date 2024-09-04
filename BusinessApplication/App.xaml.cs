@@ -20,12 +20,9 @@ namespace BusinessApplication
             var builder = new ContainerBuilder();
 
             builder.RegisterType<Logger>()
-                   .As<ILogger>()
-                   .SingleInstance();
-
-            builder.RegisterType<PopupLoggingService>()
-                   .As<ILoggingService>()
-                   .OnActivated(e => (e.Instance as ILogger)?.AddLoggingService(e.Context.Resolve<PopupLoggingService>()));
+                    .WithParameter("initialLoggingServices", new List<ILoggingService> { new PopupLoggingService() })
+                    .As<ILogger>()
+                    .SingleInstance();
 
             builder.Register((c) => AppDbContextFactory.Create());
 

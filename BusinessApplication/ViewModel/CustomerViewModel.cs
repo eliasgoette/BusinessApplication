@@ -334,7 +334,7 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
         if (string.IsNullOrWhiteSpace(_customerNumber))
             return false;
 
-        var regex = new System.Text.RegularExpressions.Regex(@"^CU\d{5}$");
+        var regex = new Regex(@"^CU\d{5}$");
         return regex.IsMatch(_customerNumber);
     }
 
@@ -417,7 +417,7 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
             {
                 case nameof(CustomerNumber):
                     if (!ValidateCustomerNumber())
-                        error = "Kundennummer ist ungültig. Format: CU#####";
+                        error = "Customer number is invalid. Format: CU#####";
                     break;
 
                 case nameof(Email):

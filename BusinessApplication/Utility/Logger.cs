@@ -2,7 +2,17 @@
 {
     public class Logger : ILogger
     {
-        private List<ILoggingService> _loggingServices = new List<ILoggingService>();
+        private List<ILoggingService> _loggingServices;
+
+        public Logger()
+        {
+            _loggingServices = new List<ILoggingService>();
+        }
+
+        public Logger(List<ILoggingService> initialLoggingServices)
+        {
+            _loggingServices = initialLoggingServices;
+        }
 
         public void AddLoggingService(ILoggingService loggingService)
         {
