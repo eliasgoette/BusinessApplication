@@ -121,6 +121,38 @@ namespace BusinessApplication.Tests
         }
 
         [TestMethod]
+        public void ExecuteUpdate_UpdatesCustomerCorrectly()
+        {
+            // Arrange
+            var cust = new Customer
+            {
+                CustomerNumber = "CU12345",
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john.doe@example.com",
+                Website = "http://example.com",
+                PasswordHash = "Password123",
+                CustomerAddress = new Address
+                {
+                    Country = "USA",
+                    ZipCode = "12345",
+                    City = "New York",
+                    StreetAddress = "123 Main St"
+                }
+            };
+
+            _viewModel.SelectedCustomer = cust;
+
+            // Act
+            _viewModel.Update.Execute(this);
+
+            // Assert
+            _mockCustomerRepository.Verify(repo => repo.Update(It.Is<Customer>(c => c == cust)), Times.Once);
+
+            _mockCustomerRepository.Verify(repo => repo.Update(It.IsAny<Customer>()), Times.Once);
+        }
+
+        [TestMethod]
         public void ExecuteRemove_RemovesCustomerCorrectly()
         {
             // Arrange
