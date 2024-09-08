@@ -218,8 +218,8 @@ namespace BusinessApplication.Tests
         public void ValidatePassword_ValidPassword_ReturnsTrue()
         {
             // Arrange
-            _viewModel.PasswordHash = "Valid1Password";
-            var method = typeof(CustomerViewModel).GetMethod("ValidatePassword", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            _viewModel.NewPassword = "Valid1Password";
+            var method = typeof(CustomerViewModel).GetMethod("ValidateNewPassword", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
             // Act
             var result = (bool)method.Invoke(_viewModel, null);
