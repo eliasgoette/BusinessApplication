@@ -6,11 +6,7 @@
         <Configuration>
           <CodeCoverage>
             <Exclude>
-              <ModulePath>.*BusinessApplication.Migrations.*</ModulePath>
-              <ModulePath>.*BusinessApplication.Model.*</ModulePath>
-              <ModulePath>.*BusinessApplication.View.*</ModulePath>
-              <ModulePath>.*\.xaml$</ModulePath>
-              <ModulePath>.*DbContext.*</ModulePath>
+
             </Exclude>
           </CodeCoverage>
         </Configuration>
