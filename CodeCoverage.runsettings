@@ -7,6 +7,7 @@
           <CodeCoverage>
             <ModulePaths>
               <Exclude>
+                <ModulePath>.*BusinessApplication.Migrations.*</ModulePath>
                 <ModulePath>.*BusinessApplication.Model.*</ModulePath>
               </Exclude>
             </ModulePaths>
