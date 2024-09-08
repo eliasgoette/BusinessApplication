@@ -28,9 +28,5 @@
   <ItemGroup>
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
-  
-    <PropertyGroup>
-      <RunSettingsFilePath>$(MSBuildProjectDirectory)\TestCoverage.runsettings</RunSettingsFilePath>
-    </PropertyGroup>
 
 </Project>

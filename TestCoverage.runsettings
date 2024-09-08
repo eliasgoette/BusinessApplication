@@ -5,12 +5,10 @@
       <DataCollector friendlyName="Code Coverage">
         <Configuration>
           <CodeCoverage>
-            <!-- Exclude specific assemblies -->
             <Exclude>
-              <ModulePath>.*\\Migrations\\.*</ModulePath>
-              <ModulePath>.*\\Model\\.*</ModulePath>
-
-              <!-- Exclude auto-generated code (optional) -->
+              <!-- Optionally exclude entire namespaces -->
+              <Namespace>BusinessApplication.Migrations</Namespace>
+              <Namespace>BusinessApplication.Model</Namespace>
               <Attributes>
                 <Exclude>^System\.Diagnostics\.CodeAnalysis\.ExcludeFromCodeCoverageAttribute$</Exclude>
               </Attributes>
