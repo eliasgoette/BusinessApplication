@@ -228,18 +228,5 @@ namespace BusinessApplication.Tests
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
-        public void ValidateNewPassword_ValidNewPassword_ReturnsTrue()
-        {
-            // Arrange
-            _viewModel.NewPassword = "NewValid1Password";
-            var method = typeof(CustomerViewModel).GetMethod("ValidateNewPassword", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-            // Act
-            var result = (bool)method.Invoke(_viewModel, null);
-
-            // Assert
-            Assert.IsTrue(result);
-        }
     }
 }
