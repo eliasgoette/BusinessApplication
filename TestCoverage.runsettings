@@ -34,6 +34,8 @@ Included items must then not match any entries in the exclude list to remain inc
               </Include>
               <Exclude>
                 <ModulePath>.*CPPUnitTestFramework.*</ModulePath>
+                <ModulePath>.*Moq.*</ModulePath>
+                <!-- Exclude Moq library -->
               </Exclude>
               <!-- Specifies additional list of directories where binaries static native instrumentation should be searched. -->
               <IncludeDirectories>
@@ -73,8 +75,12 @@ Included items must then not match any entries in the exclude list to remain inc
                 <Source>.*\\public\\sdk\\.*</Source>
                 <Source>.*\\microsoft sdks\\.*</Source>
                 <Source>.*\\vc\\include\\.*</Source>
-                <Source>.*\\Model\\*</Source>
-                <Source>.*\\Migrations\\*</Source>
+                <Source>.*\\Model\\.*</Source>
+                <!-- Exclude ./Model -->
+                <Source>.*\\Migrations\\.*</Source>
+                <!-- Exclude ./Migrations -->
+                <Source>.*\\BusinessApplication.Tests\\.*</Source>
+                <!-- Exclude ./BusinessApplication.Tests -->
               </Exclude>
             </Sources>
 
