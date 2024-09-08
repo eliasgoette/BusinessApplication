@@ -5,7 +5,12 @@ VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessApplication", "BusinessApplication\BusinessApplication.csproj", "{6188B124-D5C2-4741-990D-5B43C89F1E52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessApplication.Tests", "BusinessApplication.Tests\BusinessApplication.Tests.csproj", "{69E4B4B9-374E-45D6-AC2D-0AABC6AC1B2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessApplication.Tests", "BusinessApplication.Tests\BusinessApplication.Tests.csproj", "{69E4B4B9-374E-45D6-AC2D-0AABC6AC1B2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F7D92B64-112D-4B0F-8F96-142A52A1CF0E}"
+	ProjectSection(SolutionItems) = preProject
+		TestCoverage.runsettings = TestCoverage.runsettings
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

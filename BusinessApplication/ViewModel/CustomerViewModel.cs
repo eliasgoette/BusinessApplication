@@ -4,13 +4,8 @@ using BusinessApplication.Utility;
 using BusinessApplication.View;
 using BusinessApplication.ViewModel;
 using System.ComponentModel;
-using System.DirectoryServices.ActiveDirectory;
-using System.Net;
-using System.Runtime.ConstrainedExecution;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Windows.Media.Media3D;
 
 public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
 {
