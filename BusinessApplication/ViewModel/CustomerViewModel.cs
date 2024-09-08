@@ -4,8 +4,13 @@ using BusinessApplication.Utility;
 using BusinessApplication.View;
 using BusinessApplication.ViewModel;
 using System.ComponentModel;
+using System.DirectoryServices.ActiveDirectory;
+using System.Net;
+using System.Runtime.ConstrainedExecution;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Windows.Media.Media3D;
 
 public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
 {
@@ -342,9 +347,17 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
         if (string.IsNullOrWhiteSpace(_email))
             return false;
-
         var regex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         return regex.IsMatch(_email);
+
+        /* 
+         * Begrenzungen der RegEx-Validierung für E-Mail Adressen:
+         * Lange Domainnamen und TLDs
+         * Quoted Strings
+         * Internationalisierte E-Mail-Adressen
+         * Kommentare und Sonderzeichen  
+         */
+
     }
 
     private bool ValidateWebsite()
@@ -363,6 +376,11 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
 
         var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$");
         return regex.IsMatch(PasswordHash);
+    }
+    private bool ValidateNewPassword()
+    {
+        return !string.IsNullOrWhiteSpace(NewPassword) &&
+               Regex.IsMatch(NewPassword, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$");
     }
 
     private bool ValidateInput()

@@ -170,5 +170,76 @@ namespace BusinessApplication.Tests
             _mockCustomerRepository.Verify(repo => repo.Remove(It.Is<Customer>(c => c.CustomerNumber == "CU12345")), Times.Once);
             _mockAddressRepository.Verify(repo => repo.Remove(It.Is<Address>(a => a.StreetAddress == "123 Main St")), Times.Once);
         }
+
+        [TestMethod]
+        public void ValidateCustomerNumber_ValidCustomerNumber_ReturnsTrue()
+        {
+            // Arrange
+            _viewModel.CustomerNumber = "CU12345";
+            var method = typeof(CustomerViewModel).GetMethod("ValidateCustomerNumber", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            // Act
+            var result = (bool)method.Invoke(_viewModel, null);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        public void ValidateWebsite_ValidWebsite_ReturnsTrue()
+        {
+            // Arrange
+            _viewModel.Website = "http://example.com";
+            var method = typeof(CustomerViewModel).GetMethod("ValidateWebsite", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            // Act
+            var result = (bool)method.Invoke(_viewModel, null);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ValidateEmail_ValidEmail_ReturnsTrue()
+        {
+            // Arrange
+            _viewModel.Email = "test@example.com";
+            var method = typeof(CustomerViewModel).GetMethod("ValidateEmail", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            // Act
+            var result = (bool)method.Invoke(_viewModel, null);
+
+            // Assert
+            Assert.IsTrue(result);
+
+
+        }
+
+        [TestMethod]
+        public void ValidatePassword_ValidPassword_ReturnsTrue()
+        {
+            // Arrange
+            _viewModel.PasswordHash = "Valid1Password";
+            var method = typeof(CustomerViewModel).GetMethod("ValidatePassword", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            // Act
+            var result = (bool)method.Invoke(_viewModel, null);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void ValidateNewPassword_ValidNewPassword_ReturnsTrue()
+        {
+            // Arrange
+            _viewModel.NewPassword = "NewValid1Password";
+            var method = typeof(CustomerViewModel).GetMethod("ValidateNewPassword", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            // Act
+            var result = (bool)method.Invoke(_viewModel, null);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
     }
 }

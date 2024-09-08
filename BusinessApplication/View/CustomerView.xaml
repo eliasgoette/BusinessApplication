@@ -43,19 +43,19 @@
         </StackPanel>
         <StackPanel Grid.Column="1">
             <Label>CustomerNumber</Label>
-            <TextBox Text="{Binding CustomerNumber}"></TextBox>
+            <TextBox Text="{Binding CustomerNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
             <Label>FirstName</Label>
             <TextBox Text="{Binding FirstName}"></TextBox>
             <Label>LastName</Label>
             <TextBox Text="{Binding LastName}"></TextBox>
             <Label>Email</Label>
-            <TextBox Text="{Binding Email}"></TextBox>
+            <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
             <Label>Website</Label>
-            <TextBox Text="{Binding Website}"></TextBox>
+            <TextBox Text="{Binding Website, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
             <Label>PasswordHash</Label>
-            <TextBox Text="{Binding PasswordHash, Mode=OneWay}"></TextBox>
+            <TextBox Text="{Binding PasswordHash, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, ValidatesOnDataErrors=True}"></TextBox>
             <Label>New Password</Label>
-            <TextBox Text="{Binding NewPassword}"></TextBox>
+            <TextBox Text="{Binding NewPassword, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></TextBox>
         </StackPanel>
         <StackPanel Grid.Column="2">
             <Label>Country</Label>
