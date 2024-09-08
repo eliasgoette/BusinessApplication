@@ -1,0 +1,14 @@
+﻿<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Exclude>
+            <Namespace>BusinessApplication.Migrations</Namespace>
+            <Namespace>BusinessApplication.Model</Namespace>
+          </Exclude>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
