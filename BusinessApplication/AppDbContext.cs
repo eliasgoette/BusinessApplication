@@ -9,11 +9,7 @@ namespace BusinessApplication
     {
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Article> Articles { get; set; }
-        public DbSet<ArticleGroup> ArticleGroups { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<Position> Positions { get; set; }
-        public DbSet<Invoice> Invoices { get; set; }
 
         public AppDbContext() { }
 
@@ -21,10 +17,11 @@ namespace BusinessApplication
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if(!optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured)
             {
+                // Using username and password
                 optionsBuilder.UseSqlServer("Server=localhost,1433;Database=BusinessApplicationDb;User Id=sa;Password=Password123;Encrypt=no");
-                // Verbindung über Microsoft Benutzer:
+                // Using Microsoft Account:
                 // optionsBuilder.UseSqlServer("Server=BT,1433; Database=BusinessApplicationDb; Trusted_Connection=True; Encrypt=False");
             }
         }
@@ -33,53 +30,51 @@ namespace BusinessApplication
         {
             base.OnModelCreating(modelBuilder);
 
-            #region Configure Navigation Properties
-
-            modelBuilder.Entity<Article>()
-                .Navigation(e => e.Group)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
-            modelBuilder.Entity<ArticleGroup>()
-                .Navigation(e => e.Parent)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
-            modelBuilder.Entity<ArticleGroup>()
-                .Navigation(e => e.Articles)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
             modelBuilder.Entity<Customer>()
                 .Navigation(e => e.CustomerAddress)
                 .UsePropertyAccessMode(PropertyAccessMode.Property);
 
-            modelBuilder.Entity<Invoice>()
-                .Navigation(e => e.BillingAddress)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
-            modelBuilder.Entity<Invoice>()
-                .Navigation(e => e.OrderInformations)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
-            modelBuilder.Entity<Order>()
-                .Navigation(e => e.CustomerDetails)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
-            modelBuilder.Entity<Order>()
-                .Navigation(e => e.Positions)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
-            modelBuilder.Entity<Position>()
-                .Navigation(e => e.ArticleDetails)
-                .UsePropertyAccessMode(PropertyAccessMode.Property);
-
-            #endregion
-
             modelBuilder.Entity<Address>().ToTable(nameof(Addresses), b => b.IsTemporal());
             modelBuilder.Entity<Article>().ToTable(nameof(Articles), b => b.IsTemporal());
-            modelBuilder.Entity<ArticleGroup>().ToTable(nameof(ArticleGroups), b => b.IsTemporal());
             modelBuilder.Entity<Customer>().ToTable(nameof(Customers), b => b.IsTemporal());
-            modelBuilder.Entity<Invoice>().ToTable(nameof(Invoices), b => b.IsTemporal());
-            modelBuilder.Entity<Order>().ToTable(nameof(Orders), b => b.IsTemporal());
-            modelBuilder.Entity<Position>().ToTable(nameof(Positions), b => b.IsTemporal());
+
+            modelBuilder.Entity<Article>().HasData(
+                new Article
+                {
+                    Id = 1,
+                    ArticleNumber = "A00001",
+                    Name = "Apple MacBook Pro",
+                    Price = 2800
+                },
+                new Article
+                {
+                    Id = 2,
+                    ArticleNumber = "A00002",
+                    Name = "Google Pixel Fold",
+                    Price = 1950
+                },
+                new Article
+                {
+                    Id = 3,
+                    ArticleNumber = "A00003",
+                    Name = "Samsung Galaxy Book Pro",
+                    Price = 1800
+                },
+                new Article
+                {
+                    Id = 4,
+                    ArticleNumber = "A00004",
+                    Name = "Apple iPhone 15 Pro",
+                    Price = 1200
+                },
+                new Article
+                {
+                    Id = 5,
+                    ArticleNumber = "A00005",
+                    Name = "Apple Polishing Cloth",
+                    Price = 39.99
+                }
+            );
         }
     }
 }
