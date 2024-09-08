@@ -1,12 +1,17 @@
-﻿<RunSettings>
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
   <DataCollectionRunSettings>
     <DataCollectors>
-      <DataCollector friendlyName="XPlat Code Coverage">
+      <DataCollector friendlyName="Code Coverage">
         <Configuration>
-          <Exclude>
-            <Namespace>BusinessApplication.Migrations</Namespace>
-            <Namespace>BusinessApplication.Model</Namespace>
-          </Exclude>
+          <CodeCoverage>
+            <ModulePaths>
+              <Exclude>
+                <Namespace>BusinessApplication.Migrations</Namespace>
+                <Namespace>BusinessApplication.Model</Namespace>
+              </Exclude>
+            </ModulePaths>
+          </CodeCoverage>
         </Configuration>
       </DataCollector>
     </DataCollectors>
