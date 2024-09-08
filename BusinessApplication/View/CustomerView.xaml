@@ -53,7 +53,7 @@
             <Label>Website</Label>
             <TextBox Text="{Binding Website, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
             <Label>PasswordHash</Label>
-            <TextBox Text="{Binding PasswordHash, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, ValidatesOnDataErrors=True}"></TextBox>
+            <TextBox Text="{Binding PasswordHash, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" IsReadOnly="True"></TextBox>
             <Label>New Password</Label>
             <TextBox Text="{Binding NewPassword, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></TextBox>
         </StackPanel>

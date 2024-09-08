@@ -24,6 +24,7 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
     private string? _email;
     private string? _website;
     private string? _passwordHash;
+    private string? _newPassword;
 
     private Address? _customerAddress;
     private string? _customerAddressCountry;
@@ -74,6 +75,7 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
             Email = value?.Email;
             Website = value?.Website;
             PasswordHash = value?.PasswordHash;
+            NewPassword = null;
 
             var address = value?.CustomerAddress;
             CustomerAddressCountry = address?.Country;
@@ -159,14 +161,12 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
         get
         {
-            return null;
+            return _newPassword;
         }
         set
         {
-            if (value != null)
-            {
-                PasswordHash = PasswordEncryption.HashPassword(value);
-            }
+            _newPassword = value;
+            OnPropertyChanged(nameof(NewPassword));
         }
     }
 
@@ -302,6 +302,12 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
             SelectedCustomer.LastName = LastName;
             SelectedCustomer.Email = Email;
             SelectedCustomer.Website = Website;
+
+            if (NewPassword != null)
+            {
+                PasswordHash = PasswordEncryption.HashPassword(NewPassword);
+            }
+
             SelectedCustomer.PasswordHash = PasswordHash;
 
             SelectedCustomer.CustomerAddress.Country = CustomerAddressCountry;
@@ -364,18 +370,12 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
         return regex.IsMatch(_website);
     }
 
-    private bool ValidatePassword()
-    {
-        if (string.IsNullOrWhiteSpace(PasswordHash))
-            return false;
-
-        var regex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$");
-        return regex.IsMatch(PasswordHash);
-    }
     private bool ValidateNewPassword()
     {
-        return !string.IsNullOrWhiteSpace(NewPassword) &&
-               Regex.IsMatch(NewPassword, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$");
+        if(string.IsNullOrEmpty(NewPassword)) return true;
+
+        var regex = new Regex(@"^((?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,})?$");
+        return regex.IsMatch(_newPassword);
     }
 
     private bool ValidateInput()
@@ -407,7 +407,7 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
             && !string.IsNullOrWhiteSpace(_lastName)
             && ValidateEmail()
             && ValidateWebsite()
-            && ValidatePassword()
+            && ValidateNewPassword()
             && ValidateAddressInput()
         );
     }
@@ -444,7 +444,7 @@ public class CustomerViewModel : INotifyPropertyChanged, IDataErrorInfo
                     break;
 
                 case nameof(NewPassword):
-                    if (!ValidatePassword())
+                    if (!ValidateNewPassword())
                         error = "Password must be at least 8 characters, with a mix of upper/lower case letters and digits.";
                     break;
 
