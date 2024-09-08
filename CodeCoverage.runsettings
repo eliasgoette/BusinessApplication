@@ -7,8 +7,8 @@
           <CodeCoverage>
             <ModulePaths>
               <Exclude>
-                <Namespace>BusinessApplication.Migrations</Namespace>
-                <Namespace>BusinessApplication.Model</Namespace>
+                <ModulePath>.*BusinessApplication.Migrations.*</ModulePath>
+                <ModulePath>.*BusinessApplication.Model.*</ModulePath>
               </Exclude>
             </ModulePaths>
           </CodeCoverage>
