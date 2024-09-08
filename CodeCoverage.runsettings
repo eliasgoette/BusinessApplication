@@ -5,14 +5,12 @@
       <DataCollector friendlyName="Code Coverage">
         <Configuration>
           <CodeCoverage>
-            <ModulePaths>
-              <Exclude>
-                <ModulePath>.*BusinessApplication.Migrations.*</ModulePath>
-                <ModulePath>.*BusinessApplication.Model.*</ModulePath>
-                <ModulePath>.*BusinessApplication.View.*</ModulePath>
-                <ModulePath>.*\.xaml$</ModulePath>
-              </Exclude>
-            </ModulePaths>
+            <Exclude>
+              <ModulePath>.*BusinessApplication.Migrations.*</ModulePath>
+              <ModulePath>.*BusinessApplication.Model.*</ModulePath>
+              <ModulePath>.*BusinessApplication.View.*</ModulePath>
+              <ModulePath>.*\.xaml$</ModulePath>
+            </Exclude>
           </CodeCoverage>
         </Configuration>
       </DataCollector>
