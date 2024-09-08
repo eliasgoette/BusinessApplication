@@ -10,6 +10,7 @@
               <ModulePath>.*BusinessApplication.Model.*</ModulePath>
               <ModulePath>.*BusinessApplication.View.*</ModulePath>
               <ModulePath>.*\.xaml$</ModulePath>
+              <ModulePath>.*DbContext.*</ModulePath>
             </Exclude>
           </CodeCoverage>
         </Configuration>
