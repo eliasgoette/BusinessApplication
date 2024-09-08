@@ -29,8 +29,9 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: DotNetCoreCLI@2
+- task: VSTest@2
   inputs:
-    command: 'test'
-    projects: '$(solution)'
-    arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" --settings $(Build.SourcesDirectory)/CodeCoverage.runsettings'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    codeCoverageEnabled: true
+    runSettingsFile: '$(Build.SourcesDirectory)/CodeCoverage.runsettings'
