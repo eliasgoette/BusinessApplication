@@ -31,11 +31,11 @@ steps:
 
 - task: VSTest@2
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    codeCoverageEnabled: true
-    runSettingsFile: '$(Build.SourcesDirectory)/CodeCoverage.runsettings'
     testFilterCriteria: |
       FullyQualifiedName!~BusinessApplication.Model&
       FullyQualifiedName!~BusinessApplication.View&
       FullyQualifiedName!~BusinessApplication.Migrations
+    runSettingsFile: '$(Build.SourcesDirectory)/CodeCoverage.runsettings'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    codeCoverageEnabled: true
