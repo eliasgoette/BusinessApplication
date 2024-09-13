@@ -35,3 +35,7 @@ steps:
     configuration: '$(buildConfiguration)'
     codeCoverageEnabled: true
     runSettingsFile: '$(Build.SourcesDirectory)/CodeCoverage.runsettings'
+    testFilterCriteria: |
+      FullyQualifiedName!~BusinessApplication.Model&
+      FullyQualifiedName!~BusinessApplication.View&
+      FullyQualifiedName!~BusinessApplication.Migrations
