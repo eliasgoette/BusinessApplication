@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace BusinessApplication.Utility
 {
-    internal class PopupLoggingService : ILoggingService
+    public class PopupLoggingService : ILoggingService
     {
         public void LogMessage(string message)
         {
