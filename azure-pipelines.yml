@@ -31,10 +31,6 @@ steps:
 
 - task: VSTest@2
   inputs:
-    testFilterCriteria: |
-      FullyQualifiedName!~BusinessApplication.Model&
-      FullyQualifiedName!~BusinessApplication.View&
-      FullyQualifiedName!~BusinessApplication.Migrations
     runSettingsFile: '$(Build.SourcesDirectory)/CodeCoverage.runsettings'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
