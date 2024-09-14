@@ -1,12 +1,10 @@
 ﻿using BusinessApplication.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
 
 namespace BusinessApplication
 {
     public delegate DbContext DbContextFactoryMethod();
 
-    [ExcludeFromCodeCoverage]
     public class AppDbContext : DbContext
     {
         public DbSet<Address> Addresses { get; set; }

@@ -35,5 +35,40 @@ namespace BusinessApplication.Tests
 
             Assert.AreNotEqual(res1, res2);
         }
+
+        [TestMethod]
+        public void CorrectPasswordIsMatched()
+        {
+            var passwd = "asdf$%&123";
+
+            var hash = PasswordEncryption.HashPassword(passwd);
+            var match = PasswordEncryption.MatchPassword(passwd, hash);
+
+            Assert.IsTrue(match);
+        }
+
+        [TestMethod]
+        public void WrongPasswordIsNotMatchedPasswordIsNotMatched()
+        {
+            var passwd = "asdf$%&123";
+            var wrongAttempt = "aaaaaaaaaa";
+
+            var hash = PasswordEncryption.HashPassword(passwd);
+            var match = PasswordEncryption.MatchPassword(wrongAttempt, hash);
+
+            Assert.IsFalse(match);
+        }
+
+        [TestMethod]
+        public void PartiallyCorrectPasswordIsNotMatched()
+        {
+            var passwd = "asdf$%&123";
+            var wrongAttempt = passwd.Substring(0, passwd.Length - 2);
+
+            var hash = PasswordEncryption.HashPassword(passwd);
+            var match = PasswordEncryption.MatchPassword(wrongAttempt, hash);
+
+            Assert.IsFalse(match);
+        }
     }
 }
