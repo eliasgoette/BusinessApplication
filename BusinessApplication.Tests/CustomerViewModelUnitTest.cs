@@ -1,7 +1,9 @@
 ﻿using BusinessApplication.Model;
 using BusinessApplication.Repository;
 using BusinessApplication.Utility;
+using BusinessApplication.View;
 using Moq;
+using System.Reflection;
 
 namespace BusinessApplication.Tests
 {
@@ -83,6 +85,38 @@ namespace BusinessApplication.Tests
             // Assert
             Assert.AreEqual(1, _viewModel.SearchResults.Count);
             Assert.AreEqual("CU12345", _viewModel.SearchResults[0].CustomerNumber);
+        }
+
+        [TestMethod]
+        public void ExecuteExport_ShouldShowExportWindow_WithReflection()
+        {
+            // Arrange
+            var exportWindowMock = new Mock<ExportView>();
+
+            var methodInfo = typeof(CustomerViewModel).GetMethod("ExecuteExport", BindingFlags.NonPublic | BindingFlags.Instance);
+            Mock.Get(_viewModel).Setup(v => new ExportView()).Returns(exportWindowMock.Object);
+
+            // Act
+            methodInfo.Invoke(_viewModel, null);
+
+            // Assert
+            exportWindowMock.Verify(w => w.Show(), Times.Once);
+        }
+
+        [TestMethod]
+        public void ExecuteImport_ShouldShowImportWindow_WithReflection()
+        {
+            // Arrange
+            var importWindowMock = new Mock<ImportView>();
+
+            var methodInfo = typeof(CustomerViewModel).GetMethod("ExecuteImport", BindingFlags.NonPublic | BindingFlags.Instance);
+            Mock.Get(_viewModel).Setup(v => new ImportView()).Returns(importWindowMock.Object);
+
+            // Act
+            methodInfo.Invoke(_viewModel, null);
+
+            // Assert
+            importWindowMock.Verify(w => w.Show(), Times.Once);
         }
 
         [TestMethod]
@@ -169,6 +203,55 @@ namespace BusinessApplication.Tests
             // Assert
             _mockCustomerRepository.Verify(repo => repo.Remove(It.Is<Customer>(c => c.CustomerNumber == "CU12345")), Times.Once);
             _mockAddressRepository.Verify(repo => repo.Remove(It.Is<Address>(a => a.StreetAddress == "123 Main St")), Times.Once);
+        }
+
+        [TestMethod]
+        public void TestValidateInputWithReflection()
+        {
+            // Arrange
+            _viewModel.CustomerNumber = null;
+
+            var methodInfo = typeof(CustomerViewModel).GetMethod("ValidateInput", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            // Act
+            var result = (bool)methodInfo.Invoke(_viewModel, null);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidateInput_ShouldReturnFalse_WhenFirstNameIsNullOrWhitespace_WithReflection()
+        {
+            // Arrange
+            _viewModel.CustomerNumber = "123";
+            _viewModel.FirstName = null;
+
+            var methodInfo = typeof(CustomerViewModel).GetMethod("ValidateInput", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            // Act
+            var result = (bool)methodInfo.Invoke(_viewModel, null);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void ValidateInput_ShouldReturnFalse_WhenLastNameIsNullOrWhitespace_WithReflection()
+        {
+            // Arrange
+            _viewModel.CustomerNumber = "123";
+            _viewModel.FirstName = "John";
+            _viewModel.LastName = null;
+
+            // Verwende Reflection, um die private Methode aufzurufen
+            var methodInfo = typeof(CustomerViewModel).GetMethod("ValidateInput", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            // Act
+            var result = (bool)methodInfo.Invoke(_viewModel, null);
+
+            // Assert
+            Assert.IsFalse(result);
         }
 
         [TestMethod]
