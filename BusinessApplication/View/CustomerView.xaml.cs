@@ -2,6 +2,7 @@
 using BusinessApplication.Model;
 using BusinessApplication.Repository;
 using BusinessApplication.Utility;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Controls;
 
 namespace BusinessApplication.View
@@ -9,6 +10,7 @@ namespace BusinessApplication.View
     /// <summary>
     /// Interaction logic for CustomerView.xaml
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public partial class CustomerView : UserControl
     {
         public CustomerView()
