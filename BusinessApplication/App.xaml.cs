@@ -2,10 +2,12 @@
 using BusinessApplication.Model;
 using BusinessApplication.Repository;
 using BusinessApplication.Utility;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 
 namespace BusinessApplication
 {
+    [ExcludeFromCodeCoverage]
     public partial class App : Application
     {
         private static IContainer _container;
