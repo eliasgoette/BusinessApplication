@@ -27,3 +27,4 @@ steps:
     runSettingsFile: '$(Build.SourcesDirectory)/CodeCoverage.runsettings'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    codeCoverageEnabled: true
