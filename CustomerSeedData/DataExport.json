@@ -1,0 +1,145 @@
+[
+  {
+    "CustomerAddress": {
+      "Country": "UK",
+      "ZipCode": "NW1 6XE",
+      "City": "London",
+      "StreetAddress": "123 Baker Street"
+    },
+    "CustomerNumber": "CU00001",
+    "Name": "Mr Bean",
+    "Email": "mb@gmail.com",
+    "Website": "mista.bn.co.uk",
+    "PasswordHash": "6oP8SR9BGvsa5nzeaB5l6elU4hETsxb\u002B7eGSsfJjzyBbTl4spN/A6epqgCt\u002BZ2gt"
+  },
+  {
+    "CustomerAddress": {
+      "Country": "United States",
+      "ZipCode": "CO 10101",
+      "City": "Boulder",
+      "StreetAddress": "1010 Main St."
+    },
+    "CustomerNumber": "CU00002",
+    "Name": "Max Musterman",
+    "Email": "maxmusterman@gmail.com",
+    "Website": "muster-the-man.dev",
+    "PasswordHash": null
+  },
+  {
+    "CustomerAddress": {
+      "Country": "Canada",
+      "ZipCode": "V5K 0A1",
+      "City": "Vancouver",
+      "StreetAddress": "202 Maple St."
+    },
+    "CustomerNumber": "CU00003",
+    "Name": "Jane Doe",
+    "Email": "jane.doe@example.com",
+    "Website": "janedoe.ca",
+    "PasswordHash": null
+  },
+  {
+    "CustomerAddress": {
+      "Country": "Australia",
+      "ZipCode": "2000",
+      "City": "Sydney",
+      "StreetAddress": "303 Harbour St."
+    },
+    "CustomerNumber": "CU00004",
+    "Name": "John Smith",
+    "Email": "john.smith@example.com",
+    "Website": "johnsmith.au",
+    "PasswordHash": "zs95k/FZuykpTozW1IUOaPQQaR5eEiUB66SnfhVZDqtadCXkXYqKOyoFJN8tZebE"
+  },
+  {
+    "CustomerAddress": {
+      "Country": "Germany",
+      "ZipCode": "10115",
+      "City": "Berlin",
+      "StreetAddress": "404 Alexanderplatz"
+    },
+    "CustomerNumber": "CU00005",
+    "Name": "Hans M\u00FCller",
+    "Email": "hans.mueller@example.de",
+    "Website": "hansmuller.de",
+    "PasswordHash": null
+  },
+  {
+    "CustomerAddress": {
+      "Country": "France",
+      "ZipCode": "75001",
+      "City": "Paris",
+      "StreetAddress": "505 Rue de Rivoli"
+    },
+    "CustomerNumber": "CU00006",
+    "Name": "Marie Curie",
+    "Email": "marie.curie@example.fr",
+    "Website": "mariecurie.fr",
+    "PasswordHash": null
+  },
+  {
+    "CustomerAddress": {
+      "Country": "Japan",
+      "ZipCode": "100-0001",
+      "City": "Tokyo",
+      "StreetAddress": "606 Shibuya"
+    },
+    "CustomerNumber": "CU00007",
+    "Name": "Sakura Tanaka",
+    "Email": "sakura.tanaka@example.jp",
+    "Website": "sakuratanaka.jp",
+    "PasswordHash": null
+  },
+  {
+    "CustomerAddress": {
+      "Country": "Brazil",
+      "ZipCode": "01000-000",
+      "City": "S\u00E3o Paulo",
+      "StreetAddress": "707 Avenida Paulista"
+    },
+    "CustomerNumber": "CU00008",
+    "Name": "Carlos Silva",
+    "Email": "carlos.silva@example.br",
+    "Website": "carlossilva.br",
+    "PasswordHash": "8cuI699aZuPLqgXp9Awi0qwkPaNAJFEOI4oAZTl86hWGyMP\u002BpJlf6zeYwaERgCV7"
+  },
+  {
+    "CustomerAddress": {
+      "Country": "India",
+      "ZipCode": "110001",
+      "City": "New Delhi",
+      "StreetAddress": "808 Connaught Place"
+    },
+    "CustomerNumber": "CU00009",
+    "Name": "Priya Kumar",
+    "Email": "priya.kumar@example.in",
+    "Website": "priyakumar.in",
+    "PasswordHash": null
+  },
+  {
+    "CustomerAddress": {
+      "Country": "South Africa",
+      "ZipCode": "8001",
+      "City": "Cape Town",
+      "StreetAddress": "909 Long Street"
+    },
+    "CustomerNumber": "CU00010",
+    "Name": "Sipho Nkosi",
+    "Email": "sipho.nkosi@example.za",
+    "Website": "siphonkosi.za",
+    "PasswordHash": null
+  },
+  {
+    "CustomerAddress": {
+      "Country": "United States",
+      "ZipCode": "10001",
+      "City": "NYC",
+      "StreetAddress": "6th Ave"
+    },
+    "CustomerNumber": "CU00011",
+    "Name": "John F. Kennedy",
+    "Email": "jfk@us.gov",
+    "Website": "https://www.whitehouse.gov",
+    "PasswordHash": "daFEhdH5tL3z3wcfa0wBll7Jpu9BgnDqgDGfppAjD6Z6lo8aIVHhfzEkbSxi9TzL"
+  }
+]

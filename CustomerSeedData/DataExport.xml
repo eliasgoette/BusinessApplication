@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-16"?>
+<Customers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Customer CustomerNumber="CU00001">
+    <CustomerAddress>
+      <Country>UK</Country>
+      <ZipCode>NW1 6XE</ZipCode>
+      <City>London</City>
+      <StreetAddress>123 Baker Street</StreetAddress>
+    </CustomerAddress>
+    <Name>Mr Bean</Name>
+    <Email>mb@gmail.com</Email>
+    <Website>mista.bn.co.uk</Website>
+    <PasswordHash>6oP8SR9BGvsa5nzeaB5l6elU4hETsxb+7eGSsfJjzyBbTl4spN/A6epqgCt+Z2gt</PasswordHash>
+  </Customer>
+  <Customer CustomerNumber="CU00002">
+    <CustomerAddress>
+      <Country>United States</Country>
+      <ZipCode>CO 10101</ZipCode>
+      <City>Boulder</City>
+      <StreetAddress>1010 Main St.</StreetAddress>
+    </CustomerAddress>
+    <Name>Max Musterman</Name>
+    <Email>maxmusterman@gmail.com</Email>
+    <Website>muster-the-man.dev</Website>
+  </Customer>
+  <Customer CustomerNumber="CU00003">
+    <CustomerAddress>
+      <Country>Canada</Country>
+      <ZipCode>V5K 0A1</ZipCode>
+      <City>Vancouver</City>
+      <StreetAddress>202 Maple St.</StreetAddress>
+    </CustomerAddress>
+    <Name>Jane Doe</Name>
+    <Email>jane.doe@example.com</Email>
+    <Website>janedoe.ca</Website>
+  </Customer>
+  <Customer CustomerNumber="CU00004">
+    <CustomerAddress>
+      <Country>Australia</Country>
+      <ZipCode>2000</ZipCode>
+      <City>Sydney</City>
+      <StreetAddress>303 Harbour St.</StreetAddress>
+    </CustomerAddress>
+    <Name>John Smith</Name>
+    <Email>john.smith@example.com</Email>
+    <Website>johnsmith.au</Website>
+    <PasswordHash>zs95k/FZuykpTozW1IUOaPQQaR5eEiUB66SnfhVZDqtadCXkXYqKOyoFJN8tZebE</PasswordHash>
+  </Customer>
+  <Customer CustomerNumber="CU00005">
+    <CustomerAddress>
+      <Country>Germany</Country>
+      <ZipCode>10115</ZipCode>
+      <City>Berlin</City>
+      <StreetAddress>404 Alexanderplatz</StreetAddress>
+    </CustomerAddress>
+    <Name>Hans Müller</Name>
+    <Email>hans.mueller@example.de</Email>
+    <Website>hansmuller.de</Website>
+  </Customer>
+  <Customer CustomerNumber="CU00006">
+    <CustomerAddress>
+      <Country>France</Country>
+      <ZipCode>75001</ZipCode>
+      <City>Paris</City>
+      <StreetAddress>505 Rue de Rivoli</StreetAddress>
+    </CustomerAddress>
+    <Name>Marie Curie</Name>
+    <Email>marie.curie@example.fr</Email>
+    <Website>mariecurie.fr</Website>
+  </Customer>
+  <Customer CustomerNumber="CU00007">
+    <CustomerAddress>
+      <Country>Japan</Country>
+      <ZipCode>100-0001</ZipCode>
+      <City>Tokyo</City>
+      <StreetAddress>606 Shibuya</StreetAddress>
+    </CustomerAddress>
+    <Name>Sakura Tanaka</Name>
+    <Email>sakura.tanaka@example.jp</Email>
+    <Website>sakuratanaka.jp</Website>
+  </Customer>
+  <Customer CustomerNumber="CU00008">
+    <CustomerAddress>
+      <Country>Brazil</Country>
+      <ZipCode>01000-000</ZipCode>
+      <City>São Paulo</City>
+      <StreetAddress>707 Avenida Paulista</StreetAddress>
+    </CustomerAddress>
+    <Name>Carlos Silva</Name>
+    <Email>carlos.silva@example.br</Email>
+    <Website>carlossilva.br</Website>
+    <PasswordHash>8cuI699aZuPLqgXp9Awi0qwkPaNAJFEOI4oAZTl86hWGyMP+pJlf6zeYwaERgCV7</PasswordHash>
+  </Customer>
+  <Customer CustomerNumber="CU00009">
+    <CustomerAddress>
+      <Country>India</Country>
+      <ZipCode>110001</ZipCode>
+      <City>New Delhi</City>
+      <StreetAddress>808 Connaught Place</StreetAddress>
+    </CustomerAddress>
+    <Name>Priya Kumar</Name>
+    <Email>priya.kumar@example.in</Email>
+    <Website>priyakumar.in</Website>
+  </Customer>
+  <Customer CustomerNumber="CU00010">
+    <CustomerAddress>
+      <Country>South Africa</Country>
+      <ZipCode>8001</ZipCode>
+      <City>Cape Town</City>
+      <StreetAddress>909 Long Street</StreetAddress>
+    </CustomerAddress>
+    <Name>Sipho Nkosi</Name>
+    <Email>sipho.nkosi@example.za</Email>
+    <Website>siphonkosi.za</Website>
+  </Customer>
+  <Customer CustomerNumber="CU00011">
+    <CustomerAddress>
+      <Country>United States</Country>
+      <ZipCode>10001</ZipCode>
+      <City>NYC</City>
+      <StreetAddress>6th Ave</StreetAddress>
+    </CustomerAddress>
+    <Name>John F. Kennedy</Name>
+    <Email>jfk@us.gov</Email>
+    <Website>https://www.whitehouse.gov</Website>
+    <PasswordHash>daFEhdH5tL3z3wcfa0wBll7Jpu9BgnDqgDGfppAjD6Z6lo8aIVHhfzEkbSxi9TzL</PasswordHash>
+  </Customer>
+</Customers>
