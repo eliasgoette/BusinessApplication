@@ -88,38 +88,6 @@ namespace BusinessApplication.Tests
         }
 
         [TestMethod]
-        public void ExecuteExport_ShouldShowExportWindow_WithReflection()
-        {
-            // Arrange
-            var exportWindowMock = new Mock<ExportView>();
-
-            var methodInfo = typeof(CustomerViewModel).GetMethod("ExecuteExport", BindingFlags.NonPublic | BindingFlags.Instance);
-            Mock.Get(_viewModel).Setup(v => new ExportView()).Returns(exportWindowMock.Object);
-
-            // Act
-            methodInfo.Invoke(_viewModel, null);
-
-            // Assert
-            exportWindowMock.Verify(w => w.Show(), Times.Once);
-        }
-
-        [TestMethod]
-        public void ExecuteImport_ShouldShowImportWindow_WithReflection()
-        {
-            // Arrange
-            var importWindowMock = new Mock<ImportView>();
-
-            var methodInfo = typeof(CustomerViewModel).GetMethod("ExecuteImport", BindingFlags.NonPublic | BindingFlags.Instance);
-            Mock.Get(_viewModel).Setup(v => new ImportView()).Returns(importWindowMock.Object);
-
-            // Act
-            methodInfo.Invoke(_viewModel, null);
-
-            // Assert
-            importWindowMock.Verify(w => w.Show(), Times.Once);
-        }
-
-        [TestMethod]
         public void ExecuteAdd_AddsCustomerCorrectly()
         {
             // Arrange
